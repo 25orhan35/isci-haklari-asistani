@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>İşçi Hakları Asistanı</title>
+</head>
+
+<body>
+
+<h1>⚖️ İşçi Hakları Asistanı</h1>
+
+<p>Yeni uygulamamız çalışıyor.</p>
+
+<input id="soru" placeholder="Sorunuzu yazın">
+
+<button onclick="cevapla()">Sor</button>
+
+<p id="cevap"></p>
+
+<script>
+
+function cevapla() {
+
+    const soru =
+        document.getElementById("soru").value.toLowerCase();
+
+    let cevap = "";
+
+    if (soru.includes("fazla mesai")) {
+
+        cevap =
+        "Fazla çalışma konusunda 4857 sayılı İş Kanunu'nun 41. maddesi incelenmelidir.";
+
+    } else if (soru.includes("pazar")) {
+
+        cevap =
+        "Hafta tatili konusunda 4857 sayılı İş Kanunu'nun 46. maddesi incelenmelidir.";
+
+    } else if (soru.includes("yıllık izin")) {
+
+        cevap =
+        "Yıllık ücretli izin konusunda 4857 sayılı İş Kanunu'nun 53. maddesi incelenmelidir.";
+
+    } else {
+
+        cevap =
+        "Sorunuz alındı. Daha ayrıntılı hukuki değerlendirme için olayınızı anlatabilirsiniz.";
+
+    }
+
+    document.getElementById("cevap").innerText = cevap;
+
+}
+
+</script>
+
+</body>
+</html>

@@ -1,0 +1,498 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+
+<meta charset="UTF-8">
+
+<meta name="viewport"
+      content="width=device-width, initial-scale=1.0">
+
+<title>İşçi Hakları Asistanı</title>
+
+<style>
+
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    background: #f4f6f8;
+    color: #1f2937;
+}
+
+header {
+    background: #111827;
+    color: white;
+    padding: 25px 15px;
+    text-align: center;
+}
+
+header h1 {
+    margin: 0;
+    font-size: 25px;
+}
+
+header p {
+    margin: 8px 0 0;
+    color: #cbd5e1;
+}
+
+.container {
+    max-width: 900px;
+    margin: auto;
+    padding: 20px;
+}
+
+.card {
+    background: white;
+    border-radius: 18px;
+    padding: 20px;
+    margin-bottom: 18px;
+    box-shadow: 0 4px 15px rgba(0,0,0,.06);
+}
+
+.card h2 {
+    margin-top: 0;
+}
+
+textarea {
+    width: 100%;
+    min-height: 130px;
+    resize: vertical;
+    border: 1px solid #d1d5db;
+    border-radius: 12px;
+    padding: 15px;
+    font-size: 16px;
+    outline: none;
+}
+
+textarea:focus {
+    border-color: #64748b;
+}
+
+button {
+    width: 100%;
+    margin-top: 12px;
+    padding: 15px;
+    border: 0;
+    border-radius: 12px;
+    background: #111827;
+    color: white;
+    font-size: 16px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+button:hover {
+    background: #374151;
+}
+
+#sonuc {
+    display: none;
+    line-height: 1.6;
+}
+
+.kaynak {
+    background: #fff7ed;
+    border-left: 4px solid #f97316;
+    padding: 13px;
+    margin-top: 12px;
+    border-radius: 6px;
+}
+
+.yargitay {
+    background: #eef2ff;
+    border-left: 4px solid #4f46e5;
+    padding: 13px;
+    margin-top: 12px;
+    border-radius: 6px;
+}
+
+.uyari {
+    font-size: 12px;
+    color: #64748b;
+    text-align: center;
+    line-height: 1.5;
+}
+
+.ornekler {
+    display: grid;
+    grid-template-columns:
+        repeat(auto-fit, minmax(200px, 1fr));
+    gap: 10px;
+}
+
+.ornek {
+    background: #f8fafc;
+    color: #1f2937;
+    border: 1px solid #e5e7eb;
+    font-size: 14px;
+}
+
+.ornek:hover {
+    background: #eef2ff;
+}
+
+footer {
+    text-align: center;
+    padding: 25px;
+    color: #64748b;
+    font-size: 12px;
+}
+
+</style>
+
+</head>
+
+<body>
+
+
+<header>
+
+<h1>⚖️ İşçi Hakları Asistanı</h1>
+
+<p>
+Çalışma hayatınızla ilgili sorunuzu sorun
+</p>
+
+</header>
+
+
+<div class="container">
+
+
+<div class="card">
+
+<h2>💬 Sorunuzu anlatın</h2>
+
+<p>
+Yaşadığınız olayı kendi cümlelerinizle yazabilirsiniz.
+</p>
+
+<textarea
+id="soru"
+placeholder="Örneğin: Haftada 44 saat çalışıyorum. Pazar günü de çalışıyorum fakat hafta tatili ücretimi alamıyorum. Haklarım nelerdir?"
+></textarea>
+
+<button onclick="soruSor()">
+🔎 Hukuki değerlendirme yap
+</button>
+
+</div>
+
+
+<div class="card">
+
+<h2>📌 Örnek sorular</h2>
+
+<div class="ornekler">
+
+<button
+class="ornek"
+onclick="ornekSec('Pazar günü çalışıyorum. Hafta tatili ücretimi alabilir miyim?')">
+📅 Hafta tatili
+</button>
+
+<button
+class="ornek"
+onclick="ornekSec('Fazla mesai ücretimi alamıyorum. Ne yapabilirim?')">
+💰 Fazla mesai
+</button>
+
+<button
+class="ornek"
+onclick="ornekSec('Yıllık izin hakkım kaç gün?')">
+🏖️ Yıllık izin
+</button>
+
+<button
+class="ornek"
+onclick="ornekSec('Resmi tatilde çalıştım. Ayrıca ücret almam gerekir mi?')">
+🇹🇷 Resmi tatil
+</button>
+
+</div>
+
+</div>
+
+
+<div
+id="sonuc"
+class="card">
+
+<h2>⚖️ Değerlendirme</h2>
+
+<div id="cevap"></div>
+
+</div>
+
+
+<div class="uyari">
+
+⚠️ Bu uygulama genel hukuki bilgilendirme
+amacıyla hazırlanmıştır. Somut olayın tüm
+koşulları ve belgeleri incelenmeden kesin
+hukuki sonuç çıkarılamaz.
+
+</div>
+
+
+</div>
+
+
+<footer>
+
+İşçi Hakları Asistanı
+
+</footer>
+
+
+<script>
+
+function normalize(metin) {
+
+    return metin
+        .toLocaleLowerCase("tr-TR")
+        .replace(/ı/g, "i")
+        .replace(/ğ/g, "g")
+        .replace(/ü/g, "u")
+        .replace(/ş/g, "s")
+        .replace(/ö/g, "o")
+        .replace(/ç/g, "c");
+
+}
+
+
+function ornekSec(metin) {
+
+    document.getElementById("soru").value = metin;
+
+    soruSor();
+
+}
+
+
+function soruSor() {
+
+    const soru =
+        document.getElementById("soru").value.trim();
+
+    if (!soru) {
+
+        alert("Lütfen sorunuzu yazın.");
+
+        return;
+
+    }
+
+
+    const q = normalize(soru);
+
+    let cevap = "";
+
+    let kaynak = "";
+
+    let yargitay = "";
+
+
+    if (
+        q.includes("fazla mesai") ||
+        q.includes("fazla calisma") ||
+        q.includes("mesai")
+    ) {
+
+        cevap = `
+        Sorunuz fazla çalışma konusuyla ilgilidir.
+
+        Genel olarak haftalık 45 saati aşan çalışmalar
+        fazla çalışma kapsamında değerlendirilebilir.
+
+        Ancak iş sözleşmesi, toplu iş sözleşmesi,
+        çalışma düzeni ve işyeri kayıtları ayrıca
+        incelenmelidir.
+        `;
+
+        kaynak = `
+        <strong>4857 sayılı İş Kanunu m.41</strong><br>
+        Fazla çalışma ve fazla çalışma ücretine ilişkin
+        temel düzenleme.
+        `;
+
+        yargitay = `
+        Fazla çalışma iddialarında çalışma düzeni,
+        puantaj kayıtları, bordrolar ve diğer deliller
+        birlikte değerlendirilir.
+        `;
+
+    }
+
+    else if (
+        q.includes("pazar") ||
+        q.includes("hafta tatili")
+    ) {
+
+        cevap = `
+        Sorunuz hafta tatili konusuyla ilgilidir.
+
+        İşçinin hafta tatili hakkı ve hafta tatilinde
+        yapılan çalışmanın ücretlendirilmesi,
+        çalışma düzeni birlikte değerlendirilerek
+        belirlenmelidir.
+
+        Özellikle haftalık çalışma programınız,
+        vardiya düzeniniz ve TİS hükümleri önemlidir.
+        `;
+
+        kaynak = `
+        <strong>4857 sayılı İş Kanunu m.46</strong><br>
+        Hafta tatili ve hafta tatili ücretine ilişkin
+        temel düzenleme.
+        `;
+
+        yargitay = `
+        Hafta tatili çalışmalarında işçinin haftalık
+        çalışma düzeni ve hafta tatilinden yararlanıp
+        yararlanmadığı önem taşır.
+        `;
+
+    }
+
+    else if (
+        q.includes("yillik izin") ||
+        q.includes("izin hakki")
+    ) {
+
+        cevap = `
+        Sorunuz yıllık ücretli izin hakkıyla ilgilidir.
+
+        Yıllık izin süresi işçinin aynı işverene bağlı
+        çalışma süresine göre değişir.
+
+        İşyerindeki kıdem sürenizi belirtirseniz
+        izin süreniz ayrıca değerlendirilebilir.
+        `;
+
+        kaynak = `
+        <strong>4857 sayılı İş Kanunu m.53</strong><br>
+        Yıllık ücretli izin hakkına ilişkin temel düzenleme.
+        `;
+
+        yargitay = `
+        Yıllık izin bakımından işçinin çalışma süresi,
+        izin kayıtları ve iş ilişkisinin devam edip
+        etmediği gibi hususlar önem taşır.
+        `;
+
+    }
+
+    else if (
+        q.includes("resmi tatil") ||
+        q.includes("bayram") ||
+        q.includes("ubgt")
+    ) {
+
+        cevap = `
+        Sorunuz ulusal bayram ve genel tatil çalışmasıyla
+        ilgilidir.
+
+        Genel olarak bu günlerde çalışma yapılması halinde
+        ayrıca ücret hakkı gündeme gelir.
+
+        Çalışılan gün ve ücret sistemi ayrıca incelenmelidir.
+        `;
+
+        kaynak = `
+        <strong>4857 sayılı İş Kanunu m.47</strong><br>
+        Ulusal bayram ve genel tatil ücretine ilişkin
+        temel düzenleme.
+        `;
+
+        yargitay = `
+        Genel tatil çalışmasının ispatında işyeri kayıtları,
+        puantajlar, bordrolar ve diğer deliller önemlidir.
+        `;
+
+    }
+
+    else {
+
+        cevap = `
+        Sorunuzu aldım ancak bu konu için şu an doğrudan
+        bir konu eşleştirmesi yapamadım.
+
+        Daha iyi değerlendirme yapabilmem için olayınızı
+        ayrıntılı anlatabilirsiniz.
+
+        Örneğin çalışma günlerinizi, günlük çalışma
+        saatlerinizi, kıdeminizi, ücretinizi ve işverenin
+        uygulamasını yazabilirsiniz.
+        `;
+
+        kaynak = `
+        Henüz doğrudan mevzuat eşleşmesi bulunamadı.
+        `;
+
+        yargitay = `
+        Uygun Yargıtay kararı eşleştirilebilmesi için
+        olayın daha ayrıntılı açıklanması gerekiyor.
+        `;
+
+    }
+
+
+    document.getElementById("cevap").innerHTML = `
+
+        <p>${cevap}</p>
+
+        <div class="kaynak">
+
+            📚 <strong>İlgili mevzuat</strong>
+
+            <br><br>
+
+            ${kaynak}
+
+        </div>
+
+
+        <div class="yargitay">
+
+            🏛️ <strong>Yargıtay değerlendirmesi</strong>
+
+            <br><br>
+
+            ${yargitay}
+
+            <br><br>
+
+            <a
+            href="https://karararama.yargitay.gov.tr/"
+            target="_blank"
+            rel="noopener">
+
+            Yargıtay Karar Arama Sistemi
+
+            </a>
+
+        </div>
+
+    `;
+
+
+    document.getElementById("sonuc").style.display =
+        "block";
+
+
+    document.getElementById("sonuc")
+        .scrollIntoView({
+            behavior: "smooth"
+        });
+
+}
+
+</script>
+
+</body>
+</html>

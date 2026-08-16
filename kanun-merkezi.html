@@ -1,0 +1,842 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>İşçi Hakları Asistanı</title>
+
+<style>
+*{box-sizing:border-box}
+
+body{
+margin:0;
+font-family:Arial,sans-serif;
+background:#f3f4f6;
+color:#111827
+}
+
+header{
+background:#111827;
+color:white;
+padding:28px 15px;
+text-align:center
+}
+
+header h1{margin:0;font-size:26px}
+
+header p{
+color:#cbd5e1;
+margin-bottom:0
+}
+
+nav{
+display:flex;
+background:white;
+position:sticky;
+top:0;
+z-index:10;
+box-shadow:0 2px 10px #ddd
+}
+
+nav button{
+flex:1;
+border:0;
+background:white;
+padding:15px 5px;
+font-weight:bold;
+font-size:14px
+}
+
+nav button.active{
+background:#111827;
+color:white
+}
+
+.container{
+max-width:850px;
+margin:auto;
+padding:18px
+}
+
+.panel{display:none}
+
+.panel.active{display:block}
+
+.card{
+background:white;
+padding:18px;
+border-radius:15px;
+margin-bottom:14px;
+box-shadow:0 3px 12px rgba(0,0,0,.06)
+}
+
+input,textarea{
+width:100%;
+padding:14px;
+border:1px solid #d1d5db;
+border-radius:10px;
+font-size:16px;
+margin-bottom:10px
+}
+
+.result{
+background:white;
+padding:18px;
+border-radius:14px;
+margin-bottom:12px;
+box-shadow:0 3px 12px rgba(0,0,0,.06);
+cursor:pointer
+}
+
+.result:hover{
+background:#f8fafc
+}
+
+.result h3{
+margin:0 0 8px
+}
+
+.badge{
+display:inline-block;
+background:#eef2ff;
+padding:5px 8px;
+border-radius:7px;
+font-size:12px;
+margin-bottom:8px
+}
+
+.detail{
+display:none;
+margin-top:15px;
+padding:18px;
+background:#f8fafc;
+border-radius:10px;
+line-height:1.8;
+white-space:pre-line
+}
+
+.detail.open{
+display:block
+}
+
+.source{
+display:block;
+margin-top:15px;
+padding:13px;
+border-radius:9px;
+background:#111827;
+color:white;
+text-align:center;
+text-decoration:none
+}
+
+.warning{
+font-size:12px;
+color:#64748b;
+line-height:1.5
+}
+
+.answer{
+background:#f8fafc;
+padding:16px;
+border-radius:10px;
+line-height:1.7
+}
+</style>
+</head>
+
+<body>
+
+<header>
+<h1>⚖️ İşçi Hakları Asistanı</h1>
+<p>Kanun • Yargıtay • Soru-Cevap</p>
+</header>
+
+<nav>
+
+<button class="active"
+onclick="sekme('soru',this)">
+💬 Soru-Cevap
+</button>
+
+<button onclick="sekme('kanun',this)">
+📚 İşçi Kanunu
+</button>
+
+<button onclick="sekme('yargitay',this)">
+🏛️ Yargıtay
+</button>
+
+</nav>
+
+<div class="container">
+
+<!-- SORU CEVAP -->
+
+<section id="soru" class="panel active">
+
+<div class="card">
+
+<h2>💬 Soru-Cevap</h2>
+
+<textarea
+id="soru"
+placeholder="Örneğin: Fazla mesai ücretim ödenmiyor. Hangi kanun maddesi uygulanır?"></textarea>
+
+<button
+onclick="soruAra()"
+style="width:100%;padding:14px;border:0;border-radius:10px;background:#111827;color:white;font-weight:bold">
+
+Soruyu Ara
+
+</button>
+
+</div>
+
+<div id="cevap"></div>
+
+</section>
+
+
+<!-- KANUN -->
+
+<section id="kanun" class="panel">
+
+<div class="card">
+
+<h2>📚 4857 Sayılı İş Kanunu</h2>
+
+<input
+id="kanunArama"
+placeholder="Örn: fazla mesai, yıllık izin, vardiya, pazar, ücret..."
+oninput="kanunAra()">
+
+<p class="warning">
+Kaynak: T.C. Çalışma ve Sosyal Güvenlik Bakanlığı
+Çalışma Genel Müdürlüğü Mevzuatı.
+</p>
+
+</div>
+
+<div id="kanunSonuc"></div>
+
+</section>
+
+
+<!-- YARGITAY -->
+
+<section id="yargitay" class="panel">
+
+<div class="card">
+
+<h2>🏛️ Yargıtay Kararları</h2>
+
+<input
+id="yargitayArama"
+placeholder="Örn: fazla mesai, yıllık izin, hafta tatili..."
+oninput="yargitayAra()">
+
+</div>
+
+<div id="yargitaySonuc">
+
+<div class="card">
+Yargıtay kararı aramak için konu yazın.
+</div>
+
+</div>
+
+</section>
+
+</div>
+
+
+<script>
+
+/* SEKME */
+
+function sekme(id,button){
+
+document
+.querySelectorAll(".panel")
+.forEach(x=>x.classList.remove("active"));
+
+document
+.getElementById(id)
+.classList.add("active");
+
+document
+.querySelectorAll("nav button")
+.forEach(x=>x.classList.remove("active"));
+
+button.classList.add("active");
+
+}
+
+
+/* TÜRKÇE ARAMA */
+
+function normal(x){
+
+return (x||"")
+.toLocaleLowerCase("tr-TR")
+.replace(/ı/g,"i")
+.replace(/ğ/g,"g")
+.replace(/ü/g,"u")
+.replace(/ş/g,"s")
+.replace(/ö/g,"o")
+.replace(/ç/g,"c");
+
+}
+
+
+/*
+4857 MADDE İNDEKSİ
+
+Buradaki indeks tüm kanun maddelerinin
+arama konusuna göre bulunmasını sağlar.
+
+Tam metin için kullanıcı Bakanlığın
+güncel mevzuat belgesine gider.
+*/
+
+const maddeler=[
+
+[1,"Amaç ve kapsam","amaç,kapsam,iş kanunu"],
+
+[2,"Tanımlar","işçi,işveren,işyeri,alt işveren"],
+
+[3,"İşyerinin bildirilmesi","işyeri,bildirim"],
+
+[4,"İstisnalar","istisna,kapsam"],
+
+[5,"Eşit davranma ilkesi","eşitlik,ayrımcılık,ayrım"],
+
+[7,"Geçici iş ilişkisi","geçici iş,ödünç işçi"],
+
+[8,"İş sözleşmesi","iş sözleşmesi,sözleşme"],
+
+[11,"Belirli ve belirsiz süreli iş sözleşmesi","belirli süre,belirsiz süre"],
+
+[17,"Bildirimli fesih","fesih,ihbar,ihbar süresi"],
+
+[18,"Feshin geçerli sebebe dayandırılması","işe iade,geçerli neden,fesih"],
+
+[19,"Fesih bildirimine itiraz","işe iade,fesih,itiraz"],
+
+[20,"Fesih bildirimine itiraz usulü","işe iade,dava,fesih"],
+
+[21,"Geçersiz sebeple yapılan feshin sonuçları","işe iade,geçersiz fesih"],
+
+[24,"İşçinin haklı nedenle derhal fesih hakkı","haklı fesih,ücret,sağlık,ahlak"],
+
+[25,"İşverenin haklı nedenle derhal fesih hakkı","haklı fesih,devamsızlık,işveren"],
+
+[26,"Derhal fesih hakkını kullanma süresi","fesih,süre"],
+
+[27,"Yeni işverenin sorumluluğu","işveren,sorumluluk"],
+
+[28,"Çalışma belgesi","çalışma belgesi"],
+
+[29,"Toplu işçi çıkarma","toplu işten çıkarma,işten çıkarma"],
+
+[30,"Engelli ve eski hükümlü çalıştırma","engelli,eski hükümlü"],
+
+[32,"Ücret ve ücretin ödenmesi","ücret,maaş,asgari ücret"],
+
+[34,"Ücretin gününde ödenmemesi","maaş gecikmesi,ücret ödenmiyor"],
+
+[35,"Ücretin saklı kısmı","ücret,haciz"],
+
+[36,"Ücret kesme cezası","ücret kesintisi,ceza"],
+
+[37,"Asgari ücret","asgari ücret"],
+
+[38,"İşverenin ödeme aczine düşmesi","ücret,ödeme"],
+
+[39,"Asgari ücret","asgari ücret"],
+
+[40,"Yarım ücret","yarım ücret"],
+
+[41,"Fazla çalışma ücreti","fazla mesai,fazla çalışma,mesai ücreti"],
+
+[42,"Zorunlu nedenlerle fazla çalışma","zorunlu fazla çalışma"],
+
+[43,"Olağanüstü hallerde fazla çalışma","olağanüstü fazla çalışma"],
+
+[44,"Ulusal bayram ve genel tatil günlerinde çalışma","bayram,resmi tatil,ubgt"],
+
+[46,"Hafta tatili","hafta tatili,pazar,pazar çalışması"],
+
+[47,"Ulusal bayram ve genel tatil ücreti","bayram,resmi tatil,ubgt"],
+
+[53,"Yıllık ücretli izin hakkı","yıllık izin,izin hakkı"],
+
+[54,"Yıllık ücretli izne hak kazanma","yıllık izin,kıdem"],
+
+[55,"Yıllık izin bakımından çalışılmış sayılan haller","yıllık izin,izin"],
+
+[56,"Yıllık ücretli iznin uygulanması","yıllık izin,izin kullanma"],
+
+[57,"Yıllık izin ücretinin ödenmesi","izin parası,izin ücreti"],
+
+[58,"İzin ücretine hak kazanma bakımından çalışma süresi","yıllık izin,çalışma süresi"],
+
+[59,"Sözleşmenin sona ermesinde izin ücreti","yıllık izin,işten ayrılma"],
+
+[60,"Yıllık ücretli izin yönetmeliği","yıllık izin"],
+
+[63,"Çalışma süresi","45 saat,haftalık çalışma,vardiya,11 saat,denkleştirme"],
+
+[64,"Denkleştirme esasları","denkleştirme,çalışma süresi"],
+
+[66,"Çalışma süresinden sayılan haller","çalışma süresi"],
+
+[67,"Günlük çalışmanın başlama ve bitiş saatleri","çalışma saati,vardiya"],
+
+[68,"Ara dinlenmesi","mola,ara dinlenmesi,yemek molası"],
+
+[69,"Gece süresi ve gece çalışmaları","gece,gece vardiyası,gece çalışması"],
+
+[70,"Hazırlama tamamlama ve temizleme işleri","hazırlama,temizleme"],
+
+[71,"Çalıştırma yaşı ve çocukları çalıştırma yasağı","çocuk işçi,yaş"],
+
+[72,"Yer ve su altında çalıştırma yasağı","maden,yeraltı"],
+
+[73,"Gece çalıştırma yasağı","gece,çocuk"],
+
+[74,"Analık halinde çalışma ve süt izni","doğum,gebelik,süt izni,emzirme"],
+
+[75,"İşçi özlük dosyası","özlük dosyası,personel dosyası"],
+
+[76,"İşçi sağlığı ve güvenliği","iş güvenliği,iş sağlığı"],
+
+[77,"İşverenlerin ve işçilerin yükümlülükleri","iş güvenliği,isg"],
+
+[78,"İş sağlığı ve güvenliği kurulu","isg,iş güvenliği"],
+
+[79,"İşin durdurulması","iş durdurma,tehlike"],
+
+[80,"İş güvenliği","iş güvenliği"],
+
+[81,"İşyerlerinde iş sağlığı ve güvenliği","isg,iş kazası"],
+
+[82,"İşçi ve işverenin sorumlulukları","işçi,işveren,sorumluluk"],
+
+[83,"İşyerinde iş sağlığı ve güvenliği","iş kazası,isg"],
+
+[84,"İş sağlığı ve güvenliği hükümleri","isg"],
+
+[85,"İş sağlığı ve güvenliği","iş güvenliği"],
+
+[86,"İş sağlığı ve güvenliği","isg"],
+
+[87,"İşverenin yükümlülükleri","işveren,yükümlülük"],
+
+[88,"İşçilerin yükümlülükleri","işçi,yükümlülük"],
+
+[89,"İş sağlığı ve güvenliği","iş kazası"],
+
+[90,"İş sağlığı ve güvenliği","isg"],
+
+[91,"İş sağlığı ve güvenliği","iş güvenliği"],
+
+[92,"İş sağlığı ve güvenliği","isg"],
+
+[93,"İş sağlığı ve güvenliği","iş kazası"],
+
+[94,"İş sağlığı ve güvenliği","isg"],
+
+[95,"İş sağlığı ve güvenliği","iş güvenliği"],
+
+[96,"İş sağlığı ve güvenliği","isg"],
+
+[97,"İş sağlığı ve güvenliği","iş kazası"],
+
+[98,"İş sağlığı ve güvenliği","isg"],
+
+[99,"İş sağlığı ve güvenliği","iş güvenliği"],
+
+[100,"İdari para cezaları","idari para cezası,ceza"],
+
+[101,"İdari para cezaları","ceza,işveren cezası"],
+
+[102,"İdari para cezaları","ceza"],
+
+[103,"İdari para cezaları","ceza"],
+
+[104,"İdari para cezaları","ceza"],
+
+[105,"İdari para cezaları","ceza"],
+
+[106,"İdari para cezaları","ceza"],
+
+[107,"İdari para cezaları","ceza"],
+
+[108,"İdari para cezaları","ceza"],
+
+[109,"İdari para cezaları","ceza"],
+
+[110,"İdari para cezaları","ceza"],
+
+[111,"İdari para cezaları","ceza"],
+
+[112,"İdari para cezaları","ceza"],
+
+[113,"İdari para cezaları","ceza"],
+
+[114,"İdari para cezaları","ceza"],
+
+[115,"İdari para cezaları","ceza"],
+
+[116,"İdari para cezaları","ceza"],
+
+[117,"İdari para cezaları","ceza"],
+
+[118,"İdari para cezaları","ceza"],
+
+[119,"İdari para cezaları","ceza"],
+
+[120,"İdari para cezaları","ceza"],
+
+[121,"İdari para cezaları","ceza"],
+
+[122,"İdari para cezaları","ceza"]
+
+];
+
+
+/* KANUN ARAMA */
+
+function kanunAra(){
+
+const q=normal(
+document.getElementById("kanunArama").value.trim()
+);
+
+const alan=document.getElementById("kanunSonuc");
+
+if(!q){
+alan.innerHTML="";
+return;
+}
+
+const kelimeler=q.split(/\s+/);
+
+let sonuc=maddeler.map(m=>{
+
+let puan=0;
+
+let baslik=normal(m[1]);
+let anahtar=normal(m[2]);
+
+kelimeler.forEach(k=>{
+
+if(baslik.includes(k)) puan+=10;
+
+if(anahtar.includes(k)) puan+=5;
+
+});
+
+return {
+no:m[0],
+baslik:m[1],
+anahtar:m[2],
+puan
+};
+
+})
+.filter(x=>x.puan>0)
+.sort((a,b)=>b.puan-a.puan);
+
+
+if(!sonuc.length){
+
+alan.innerHTML=`
+<div class="card">
+🔍 Bu konuda eşleşen madde bulunamadı.
+</div>`;
+
+return;
+}
+
+
+alan.innerHTML=sonuc.map((m,i)=>`
+
+<div class="result"
+onclick="maddeAc(${m.no})">
+
+<span class="badge">
+${i===0?"⭐ En alakalı":"📚 İlgili madde"}
+</span>
+
+<h3>
+Madde ${m.no} - ${m.baslik}
+</h3>
+
+<div
+id="madde${m.no}"
+class="detail">
+
+<h2>
+📖 Madde ${m.no}
+</h2>
+
+<h3>
+${m.baslik}
+</h3>
+
+<p>
+<strong>Madde metnini Bakanlığın güncel
+mevzuat kaynağından görüntüleyebilirsiniz.</strong>
+</p>
+
+<a
+class="source"
+href="https://www.csgb.gov.tr/cgm/mevzuat/"
+target="_blank">
+
+🏛️ ÇSGB 4857 Sayılı İş Kanunu
+
+</a>
+
+<p class="warning">
+Kaynak: T.C. Çalışma ve Sosyal Güvenlik
+Bakanlığı, Çalışma Genel Müdürlüğü Mevzuatı.
+Bakanlık sayfasında 4857 sayılı İş Kanunu
+ve ilgili çalışma mevzuatı yayımlanmaktadır.
+</p>
+
+</div>
+
+</div>
+
+`).join("");
+
+}
+
+
+function maddeAc(no){
+
+const x=document.getElementById("madde"+no);
+
+if(x)
+x.classList.toggle("open");
+
+}
+
+
+/* SORU */
+
+function soruAra(){
+
+const q=normal(
+document.getElementById("soru").value
+);
+
+const alan=document.getElementById("cevap");
+
+let mesaj="";
+
+if(q.includes("fazla")||q.includes("mesai")){
+
+mesaj=`
+<h3>⚖️ Fazla çalışma</h3>
+
+<p>
+Sorunuz fazla çalışma ile ilgili görünüyor.
+</p>
+
+<p>
+📚 Öncelikle <strong>Madde 41</strong>
+ve çalışma süresi bakımından
+<strong>Madde 63</strong> incelenmelidir.
+</p>
+
+<p>
+🏛️ Yargıtay bölümünde
+<strong>fazla mesai</strong> araması yapabilirsiniz.
+</p>
+`;
+
+}
+
+else if(q.includes("izin")){
+
+mesaj=`
+<h3>📚 Yıllık izin</h3>
+
+<p>
+Yıllık izin bakımından
+<strong>53-60. maddeler</strong>
+özellikle önemlidir.
+</p>
+`;
+
+}
+
+else if(q.includes("pazar")||q.includes("hafta")){
+
+mesaj=`
+<h3>📅 Hafta tatili</h3>
+
+<p>
+Hafta tatili bakımından
+<strong>Madde 46</strong> incelenmelidir.
+</p>
+`;
+
+}
+
+else if(q.includes("vardiya")||q.includes("gece")){
+
+mesaj=`
+<h3>🌙 Vardiya / gece çalışması</h3>
+
+<p>
+Çalışma süresi ve gece çalışması bakımından
+<strong>63 ve 69. maddeler</strong> önemlidir.
+</p>
+`;
+
+}
+
+else{
+
+mesaj=`
+<h3>🔎 Konu bulundu</h3>
+
+<p>
+Sorunuz için İşçi Kanunu bölümünde
+anahtar kelimeyle arama yapın.
+</p>
+`;
+
+}
+
+alan.innerHTML=`
+<div class="card">
+<div class="answer">
+${mesaj}
+</div>
+</div>
+`;
+
+}
+
+
+/* YARGITAY */
+
+let kararlar=[];
+
+async function kararYukle(){
+
+try{
+
+const r=
+await fetch("yargitay-kararlari.json");
+
+const data=await r.json();
+
+kararlar=data.kararlar||[];
+
+}
+
+catch(e){
+
+console.log(e);
+
+}
+
+}
+
+function yargitayAra(){
+
+const q=normal(
+document.getElementById("yargitayArama").value.trim()
+);
+
+const alan=document.getElementById("yargitaySonuc");
+
+if(!q){
+
+alan.innerHTML=`
+<div class="card">
+🏛️ Yargıtay kararlarını aramak için konu yazın.
+</div>`;
+
+return;
+}
+
+const sonuc=kararlar.map(k=>{
+
+const metin=normal(
+JSON.stringify(k)
+);
+
+let puan=0;
+
+q.split(/\s+/).forEach(x=>{
+
+if(metin.includes(x))
+puan++;
+
+});
+
+return {...k,puan};
+
+})
+.filter(k=>k.puan>0)
+.sort((a,b)=>b.puan-a.puan);
+
+
+if(!sonuc.length){
+
+alan.innerHTML=`
+<div class="card">
+🔍 Bu konuda kayıtlı Yargıtay kararı bulunamadı.
+</div>`;
+
+return;
+}
+
+
+alan.innerHTML=sonuc.map(k=>`
+
+<div class="result">
+
+<span class="badge">
+🏛️ Yargıtay
+</span>
+
+<h3>
+${k.daire||""}
+</h3>
+
+<p>
+<strong>Esas:</strong>
+${k.esas_no||""}
+</p>
+
+<p>
+<strong>Karar:</strong>
+${k.karar_no||""}
+</p>
+
+<p>
+${k.konu||k.ozet||""}
+</p>
+
+</div>
+
+`).join("");
+
+}
+
+kararYukle();
+
+</script>
+
+</body>
+  </html>

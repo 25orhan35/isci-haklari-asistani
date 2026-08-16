@@ -1,0 +1,102 @@
+{
+  "kararlar": [
+    {
+      "id": "fazla-calisma-001",
+      "konu": "Fazla Çalışma",
+      "anahtar_kelimeler": [
+        "fazla mesai",
+        "fazla çalışma",
+        "mesai",
+        "fazla çalışma ücreti"
+      ],
+      "mevzuat": [
+        "4857 sayılı İş Kanunu m.41"
+      ],
+      "daire": "Yargıtay İş Hukuku Dairesi",
+      "karar_no": "",
+      "esas_no": "",
+      "karar_tarihi": "",
+      "ozet": "Fazla çalışma iddialarında çalışma düzeni, işyeri kayıtları, puantajlar, bordrolar ve diğer deliller birlikte değerlendirilmelidir.",
+      "resmi_kaynak": "https://karararama.yargitay.gov.tr/"
+    },
+    {
+      "id": "hafta-tatili-001",
+      "konu": "Hafta Tatili",
+      "anahtar_kelimeler": [
+        "hafta tatili",
+        "pazar",
+        "haftalık izin",
+        "hafta tatili ücreti"
+      ],
+      "mevzuat": [
+        "4857 sayılı İş Kanunu m.46"
+      ],
+      "daire": "Yargıtay İş Hukuku Dairesi",
+      "karar_no": "",
+      "esas_no": "",
+      "karar_tarihi": "",
+      "ozet": "Hafta tatili çalışmasının değerlendirilmesinde işçinin haftalık çalışma düzeni ve hafta tatilinden yararlanıp yararlanmadığı dikkate alınmalıdır.",
+      "resmi_kaynak": "https://karararama.yargitay.gov.tr/"
+    },
+    {
+      "id": "yillik-izin-001",
+      "konu": "Yıllık Ücretli İzin",
+      "anahtar_kelimeler": [
+        "yıllık izin",
+        "senelik izin",
+        "izin hakkı",
+        "kullanılmayan izin"
+      ],
+      "mevzuat": [
+        "4857 sayılı İş Kanunu m.53",
+        "4857 sayılı İş Kanunu m.57"
+      ],
+      "daire": "Yargıtay İş Hukuku Dairesi",
+      "karar_no": "",
+      "esas_no": "",
+      "karar_tarihi": "",
+      "ozet": "Yıllık izin hakkının doğumu, kullandırılması ve kullanılmayan izinlerin ücretlendirilmesi işçinin çalışma süresi ve iş ilişkisinin sona erip ermediği gibi unsurlara göre değerlendirilir.",
+      "resmi_kaynak": "https://karararama.yargitay.gov.tr/"
+    },
+    {
+      "id": "resmi-tatil-001",
+      "konu": "Ulusal Bayram ve Genel Tatil",
+      "anahtar_kelimeler": [
+        "resmi tatil",
+        "bayram",
+        "genel tatil",
+        "UBGT",
+        "tatil günü çalışma"
+      ],
+      "mevzuat": [
+        "4857 sayılı İş Kanunu m.47"
+      ],
+      "daire": "Yargıtay İş Hukuku Dairesi",
+      "karar_no": "",
+      "esas_no": "",
+      "karar_tarihi": "",
+      "ozet": "Ulusal bayram ve genel tatil günlerinde yapılan çalışmanın ücretlendirilmesi, çalışmanın gerçekleşip gerçekleşmediği ve işçinin ücret yapısı dikkate alınarak değerlendirilir.",
+      "resmi_kaynak": "https://karararama.yargitay.gov.tr/"
+    },
+    {
+      "id": "ucret-001",
+      "konu": "Ücret",
+      "anahtar_kelimeler": [
+        "maaş",
+        "ücret",
+        "maaş gecikmesi",
+        "ücret ödenmedi",
+        "maaş ödenmedi"
+      ],
+      "mevzuat": [
+        "4857 sayılı İş Kanunu m.32"
+      ],
+      "daire": "Yargıtay İş Hukuku Dairesi",
+      "karar_no": "",
+      "esas_no": "",
+      "karar_tarihi": "",
+      "ozet": "Ücret alacağının değerlendirilmesinde iş sözleşmesi, bordrolar, banka kayıtları ve işyeri uygulamaları gibi deliller önem taşır.",
+      "resmi_kaynak": "https://karararama.yargitay.gov.tr/"
+    }
+  ]
+}

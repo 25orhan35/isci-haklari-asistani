@@ -1,0 +1,62 @@
+{
+  "4857": {
+    "kanun_adi": "4857 Sayılı İş Kanunu",
+    "maddeler": [
+      {
+        "madde": "32",
+        "baslik": "Ücret ve ücretin ödenmesi",
+        "konular": ["ücret", "maaş", "ödeme", "gecikme"]
+      },
+      {
+        "madde": "41",
+        "baslik": "Fazla çalışma ücreti",
+        "konular": ["fazla mesai", "fazla çalışma", "mesai"]
+      },
+      {
+        "madde": "46",
+        "baslik": "Hafta tatili ücreti",
+        "konular": ["hafta tatili", "pazar", "haftalık izin"]
+      },
+      {
+        "madde": "47",
+        "baslik": "Ulusal bayram ve genel tatil ücreti",
+        "konular": ["resmi tatil", "bayram", "genel tatil"]
+      },
+      {
+        "madde": "53",
+        "baslik": "Yıllık ücretli izin hakkı",
+        "konular": ["yıllık izin", "izin", "senelik izin"]
+      },
+      {
+        "madde": "57",
+        "baslik": "Yıllık izin ücretinin ödenmesi",
+        "konular": ["izin ücreti", "yıllık izin parası"]
+      },
+      {
+        "madde": "63",
+        "baslik": "Çalışma süresi",
+        "konular": ["çalışma süresi", "haftalık çalışma", "45 saat"]
+      },
+      {
+        "madde": "68",
+        "baslik": "Ara dinlenmesi",
+        "konular": ["mola", "ara dinlenmesi", "dinlenme"]
+      },
+      {
+        "madde": "69",
+        "baslik": "Gece süresi ve gece çalışmaları",
+        "konular": ["gece vardiyası", "gece çalışması", "vardiya"]
+      },
+      {
+        "madde": "70",
+        "baslik": "Hazırlama, tamamlama ve temizleme işleri",
+        "konular": ["hazırlama", "temizleme", "tamamlama"]
+      },
+      {
+        "madde": "74",
+        "baslik": "Analık halinde çalışma ve süt izni",
+        "konular": ["süt izni", "doğum izni", "analık"]
+      }
+    ]
+  }
+      }

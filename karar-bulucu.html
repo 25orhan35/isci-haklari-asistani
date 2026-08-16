@@ -1,0 +1,311 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Yargıtay Karar Bulucu</title>
+
+<style>
+
+body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    background: #f3f4f6;
+    color: #111827;
+}
+
+header {
+    background: #111827;
+    color: white;
+    padding: 25px;
+    text-align: center;
+}
+
+.container {
+    max-width: 800px;
+    margin: auto;
+    padding: 20px;
+}
+
+.card {
+    background: white;
+    padding: 20px;
+    border-radius: 16px;
+    margin-bottom: 15px;
+    box-shadow: 0 4px 15px rgba(0,0,0,.06);
+}
+
+textarea {
+    width: 100%;
+    min-height: 120px;
+    padding: 15px;
+    border: 1px solid #d1d5db;
+    border-radius: 10px;
+    font-size: 16px;
+    box-sizing: border-box;
+}
+
+button {
+    width: 100%;
+    padding: 15px;
+    margin-top: 12px;
+    border: 0;
+    border-radius: 10px;
+    background: #111827;
+    color: white;
+    font-size: 16px;
+    font-weight: bold;
+}
+
+.sonuc {
+    border-left: 5px solid #4f46e5;
+    background: #eef2ff;
+    padding: 15px;
+    margin-top: 15px;
+    border-radius: 8px;
+}
+
+.bos {
+    color: #6b7280;
+}
+
+</style>
+</head>
+
+<body>
+
+<header>
+
+<h1>🏛️ Yargıtay Karar Bulucu</h1>
+
+<p>İş hukuku kararlarında konu arayın</p>
+
+</header>
+
+
+<div class="container">
+
+<div class="card">
+
+<h2>🔎 Karar ara</h2>
+
+<textarea
+id="arama"
+placeholder="Örneğin: vardiya değişikliği, fazla mesai, gece çalışması..."
+></textarea>
+
+<button onclick="ara()">
+Kararları Ara
+</button>
+
+</div>
+
+
+<div
+id="sonuclar"
+class="card">
+
+<h2>📚 Sonuçlar</h2>
+
+<div id="liste">
+
+<p class="bos">
+Henüz arama yapılmadı.
+</p>
+
+</div>
+
+</div>
+
+</div>
+
+
+<script>
+
+let kararlar = [];
+
+
+async function verileriGetir() {
+
+    try {
+
+        const cevap =
+        await fetch("yargitay-kararlari.json");
+
+        const veri =
+        await cevap.json();
+
+        kararlar = veri.kararlar;
+
+    }
+
+    catch(hata) {
+
+        document.getElementById("liste").innerHTML =
+
+        "<p>Karar veri tabanı yüklenemedi.</p>";
+
+    }
+
+}
+
+
+function normal(metin) {
+
+    return metin
+    .toLocaleLowerCase("tr-TR")
+    .replace(/ı/g,"i")
+    .replace(/ğ/g,"g")
+    .replace(/ü/g,"u")
+    .replace(/ş/g,"s")
+    .replace(/ö/g,"o")
+    .replace(/ç/g,"c");
+
+}
+
+
+function ara() {
+
+    const arama =
+    normal(
+        document.getElementById("arama").value
+    );
+
+
+    if(!arama) {
+
+        alert("Lütfen arama konusu yazın.");
+
+        return;
+
+    }
+
+
+    const kelimeler =
+    arama.split(/\s+/);
+
+
+    const bulunan =
+    kararlar.filter(karar => {
+
+        const metin =
+        normal(
+
+            karar.konu + " " +
+
+            karar.anahtar_kelimeler.join(" ") + " " +
+
+            karar.ozet
+
+        );
+
+
+        return kelimeler.some(
+            kelime =>
+
+            kelime.length > 2 &&
+            metin.includes(kelime)
+
+        );
+
+    });
+
+
+    const liste =
+    document.getElementById("liste");
+
+
+    if(bulunan.length === 0) {
+
+        liste.innerHTML = `
+
+        <p>
+        🔍 Aramanızla doğrudan eşleşen
+        karar bulunamadı.
+        </p>
+
+        `;
+
+        return;
+
+    }
+
+
+    liste.innerHTML = "";
+
+
+    bulunan.forEach(karar => {
+
+        const div =
+        document.createElement("div");
+
+        div.className = "sonuc";
+
+
+        div.innerHTML = `
+
+        <strong>
+        ${karar.daire}
+        </strong>
+
+        <br><br>
+
+        <strong>
+        Esas:
+        </strong>
+
+        ${karar.esas_no}
+
+        <br>
+
+        <strong>
+        Karar:
+        </strong>
+
+        ${karar.karar_no}
+
+        <br>
+
+        <strong>
+        Tarih:
+        </strong>
+
+        ${karar.karar_tarihi || "Doğrulanıyor"}
+
+        <br><br>
+
+        <strong>
+        Konu:
+        </strong>
+
+        ${karar.konu}
+
+        <br><br>
+
+        ${karar.ozet}
+
+        <br><br>
+
+        <strong>
+        Sonuç:
+        </strong>
+
+        ${karar.sonuc || "Belirtilmemiş"}
+
+        `;
+
+
+        liste.appendChild(div);
+
+    });
+
+}
+
+
+verileriGetir();
+
+</script>
+
+</body>
+  </html>

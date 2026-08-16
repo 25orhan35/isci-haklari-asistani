@@ -1,0 +1,766 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+
+<meta charset="UTF-8">
+
+<meta name="viewport"
+content="width=device-width, initial-scale=1.0">
+
+<title>4857 İş Kanunu</title>
+
+<style>
+
+*{
+box-sizing:border-box;
+}
+
+body{
+margin:0;
+font-family:Arial,sans-serif;
+background:#f4f6f8;
+color:#111827;
+}
+
+header{
+background:#111827;
+color:white;
+padding:28px 18px;
+text-align:center;
+}
+
+header h1{
+margin:0;
+font-size:26px;
+}
+
+header p{
+color:#cbd5e1;
+}
+
+.container{
+max-width:850px;
+margin:auto;
+padding:18px;
+}
+
+.search{
+background:white;
+padding:18px;
+border-radius:16px;
+margin-bottom:18px;
+box-shadow:0 4px 15px rgba(0,0,0,.06);
+}
+
+input{
+width:100%;
+padding:15px;
+border:1px solid #d1d5db;
+border-radius:10px;
+font-size:16px;
+outline:none;
+}
+
+input:focus{
+border-color:#111827;
+}
+
+.sonuc{
+background:white;
+padding:18px;
+border-radius:14px;
+margin-bottom:12px;
+box-shadow:0 3px 12px rgba(0,0,0,.06);
+cursor:pointer;
+}
+
+.sonuc:hover{
+background:#f8fafc;
+}
+
+.baslik{
+font-size:18px;
+font-weight:bold;
+}
+
+.konu{
+color:#64748b;
+margin-top:6px;
+}
+
+.puan{
+float:right;
+font-size:12px;
+background:#eef2ff;
+padding:5px 8px;
+border-radius:8px;
+}
+
+.detay{
+display:none;
+margin-top:15px;
+padding:16px;
+background:#f8fafc;
+border-radius:10px;
+line-height:1.7;
+}
+
+.detay.acik{
+display:block;
+}
+
+.madde-listesi{
+margin-top:15px;
+}
+
+.resmi{
+display:block;
+margin-top:15px;
+padding:13px;
+background:#111827;
+color:white;
+text-decoration:none;
+border-radius:10px;
+text-align:center;
+}
+
+.uyari{
+font-size:12px;
+color:#64748b;
+text-align:center;
+line-height:1.5;
+margin:25px 0;
+}
+
+</style>
+
+</head>
+
+<body>
+
+<header>
+
+<h1>📚 4857 Sayılı İş Kanunu</h1>
+
+<p>
+Konuya göre ilgili maddeleri bulun
+</p>
+
+</header>
+
+
+<div class="container">
+
+
+<div class="search">
+
+<input
+id="arama"
+type="text"
+placeholder="Örneğin: fazla mesai, yıllık izin, vardiya, tazminat..."
+oninput="ara()"
+>
+
+</div>
+
+
+<div id="sonuclar"
+class="madde-listesi">
+
+</div>
+
+
+<div class="uyari">
+
+4857 sayılı İş Kanunu'nun güncel metni için
+resmî mevzuat kaynağını kullanın.
+
+</div>
+
+
+</div>
+
+
+<script>
+
+const maddeler = [
+
+{
+no:"1",
+baslik:"Amaç ve kapsam",
+anahtar:[
+"amaç",
+"kapsam",
+"iş kanunu"
+],
+ozet:"İş Kanununun amacı ve kapsamına ilişkin düzenleme.",
+metin:"Madde 1 hakkında ayrıntılı ve güncel kanun metni için resmî mevzuat kaynağına başvurunuz."
+},
+
+{
+no:"2",
+baslik:"Tanımlar",
+anahtar:[
+"işçi",
+"işveren",
+"işyeri",
+"işveren vekili",
+"tanım"
+],
+ozet:"İşçi, işveren, işveren vekili ve işyeri gibi temel kavramlara ilişkin düzenlemeler.",
+metin:"Madde 2, İş Kanununda kullanılan temel kavramları ve işveren-alt işveren ilişkisine ilişkin düzenlemeleri içerir."
+},
+
+{
+no:"5",
+baslik:"Eşit davranma ilkesi",
+anahtar:[
+"eşitlik",
+"eşit davranma",
+"ayrımcılık",
+"ayrım",
+"ücret ayrımı"
+],
+ozet:"İş ilişkisinde eşit davranma ve ayrımcılık yasağı.",
+metin:"İşverenin işçilere karşı eşit davranma borcu ve ayrımcılık yasağı bakımından temel düzenlemedir."
+},
+
+{
+no:"8",
+baslik:"İş sözleşmesi",
+anahtar:[
+"iş sözleşmesi",
+"sözleşme",
+"iş akdi",
+"çalışma sözleşmesi"
+],
+ozet:"İş sözleşmesinin temel özellikleri.",
+metin:"İş sözleşmesine ilişkin temel hükümler bu bölümde düzenlenmektedir."
+},
+
+{
+no:"17",
+baslik:"Belirsiz süreli iş sözleşmesinin feshi",
+anahtar:[
+"fesih",
+"işten çıkarma",
+"işten çıkarılma",
+"iş akdi feshi",
+"belirsiz süre"
+],
+ozet:"Belirsiz süreli iş sözleşmesinin feshine ilişkin temel düzenleme.",
+metin:"Belirsiz süreli iş sözleşmesinin feshi bakımından uygulanacak temel hükümler."
+},
+
+{
+no:"18",
+baslik:"Feshin geçerli sebebe dayandırılması",
+anahtar:[
+"geçerli neden",
+"geçerli sebep",
+"işten çıkarma",
+"fesih",
+"işe iade"
+],
+ozet:"İşveren tarafından yapılan fesihte geçerli sebep ve iş güvencesi.",
+metin:"İş güvencesi kapsamında fesih ve geçerli sebep konusundaki temel düzenlemeler."
+},
+
+{
+no:"24",
+baslik:"İşçinin haklı nedenle derhal fesih hakkı",
+anahtar:[
+"haklı fesih",
+"işçi feshi",
+"işçinin feshi",
+"maaş ödenmiyor",
+"ücret ödenmiyor",
+"sağlık",
+"ahlak"
+],
+ozet:"İşçinin belirli durumlarda iş sözleşmesini derhal feshetmesine ilişkin düzenleme.",
+metin:"İşçinin haklı nedenle derhal fesih hakkının temel dayanağıdır."
+},
+
+{
+no:"25",
+baslik:"İşverenin haklı nedenle derhal fesih hakkı",
+anahtar:[
+"işveren feshi",
+"haklı fesih",
+"işten çıkarma",
+"işveren",
+"devamsızlık",
+"ahlak"
+],
+ozet:"İşverenin belirli durumlarda iş sözleşmesini derhal feshetmesine ilişkin düzenleme.",
+metin:"İşverenin haklı nedenle derhal fesih hakkına ilişkin temel hükümler."
+},
+
+{
+no:"32",
+baslik:"Ücret ve ücretin ödenmesi",
+anahtar:[
+"ücret",
+"maaş",
+"maaş ödenmiyor",
+"ücret ödenmiyor",
+"ödeme",
+"asgari ücret"
+],
+ozet:"Ücretin tanımı ve ödenmesine ilişkin temel düzenleme.",
+metin:"İşçinin ücret hakkı ve ücretin ödenmesine ilişkin temel hükümler."
+},
+
+{
+no:"34",
+baslik:"Ücretin gününde ödenmemesi",
+anahtar:[
+"maaş gecikti",
+"maaş gecikmesi",
+"ücret gecikmesi",
+"ücret ödenmiyor",
+"maaş ödenmiyor"
+],
+ozet:"Ücretin süresinde ödenmemesi halinde işçinin haklarına ilişkin düzenleme.",
+metin:"Ücretin gününde ödenmemesi halinde işçinin kullanabileceği haklar bakımından önemlidir."
+},
+
+{
+no:"41",
+baslik:"Fazla çalışma",
+anahtar:[
+"fazla mesai",
+"fazla çalışma",
+"mesai",
+"fazla saat",
+"fazla çalışıyorum",
+"mesai ücreti"
+],
+ozet:"Fazla çalışma ve fazla çalışma ücretine ilişkin temel düzenleme.",
+metin:"Fazla çalışma ve fazla çalışma ücretinin belirlenmesinde temel maddelerden biridir."
+},
+
+{
+no:"46",
+baslik:"Hafta tatili",
+anahtar:[
+"hafta tatili",
+"pazar",
+"haftalık izin",
+"hafta tatili ücreti",
+"pazar çalışması"
+],
+ozet:"Hafta tatili hakkı ve hafta tatilinde çalışmaya ilişkin düzenleme.",
+metin:"Hafta tatili hakkı bakımından temel düzenlemedir."
+},
+
+{
+no:"47",
+baslik:"Ulusal bayram ve genel tatil",
+anahtar:[
+"resmi tatil",
+"bayram",
+"genel tatil",
+"ubgt",
+"tatil çalışması",
+"29 ekim",
+"23 nisan",
+"1 mayıs"
+],
+ozet:"Ulusal bayram ve genel tatil günlerinde çalışma ve ücret.",
+metin:"Ulusal bayram ve genel tatil günlerinde çalışma yapılması halinde uygulanacak temel hükümler."
+},
+
+{
+no:"53",
+baslik:"Yıllık ücretli izin hakkı",
+anahtar:[
+"yıllık izin",
+"senelik izin",
+"izin hakkı",
+"yıllık izin süresi",
+"izin günü"
+],
+ozet:"Yıllık ücretli izin hakkının temel düzenlemesi.",
+metin:"Yıllık ücretli izin hakkının süresine ilişkin temel düzenlemedir."
+},
+
+{
+no:"54",
+baslik:"Yıllık ücretli izne hak kazanma",
+anahtar:[
+"izin hakkı",
+"yıllık izin",
+"izin kazanma",
+"kıdem",
+"çalışma süresi"
+],
+ozet:"Yıllık ücretli izne hak kazanma şartları.",
+metin:"İşçinin yıllık ücretli izne ne zaman hak kazanacağı bakımından önemlidir."
+},
+
+{
+no:"55",
+baslik:"Yıllık izin bakımından çalışılmış gibi sayılan haller",
+anahtar:[
+"yıllık izin",
+"izin",
+"çalışılmış sayılır",
+"izin hesabı"
+],
+ozet:"Bazı sürelerin yıllık izin hesabında çalışılmış gibi değerlendirilmesine ilişkin düzenleme.",
+metin:"Yıllık izin bakımından çalışılmış sayılan süreleri düzenler."
+},
+
+{
+no:"56",
+baslik:"Yıllık ücretli iznin uygulanması",
+anahtar:[
+"yıllık izin",
+"izin kullanma",
+"izin bölme",
+"izin kullanımı"
+],
+ozet:"Yıllık ücretli iznin kullanılmasına ilişkin düzenleme.",
+metin:"Yıllık ücretli iznin uygulanması ve kullanılmasına ilişkin temel hükümler."
+},
+
+{
+no:"57",
+baslik:"Yıllık izin ücretinin ödenmesi",
+anahtar:[
+"izin parası",
+"izin ücreti",
+"yıllık izin ücreti",
+"izin maaşı"
+],
+ozet:"Yıllık izin ücretinin ödenmesine ilişkin düzenleme.",
+metin:"Yıllık izin ücretinin ödenmesine ilişkin temel hükümler."
+},
+
+{
+no:"63",
+baslik:"Çalışma süresi",
+anahtar:[
+"çalışma süresi",
+"45 saat",
+"haftalık çalışma",
+"çalışma saati",
+"vardiya",
+"11 saat",
+"denkleştirme"
+],
+ozet:"Haftalık ve günlük çalışma sürelerine ilişkin temel düzenleme.",
+metin:"Çalışma süresinin belirlenmesi, haftalık çalışma süresi, günlük çalışma sınırları ve denkleştirme bakımından temel maddedir."
+},
+
+{
+no:"66",
+baslik:"Çalışma süresinden sayılan haller",
+anahtar:[
+"çalışma süresi",
+"işe ulaşım",
+"işyerinde geçirilen süre",
+"çalışma süresinden sayılır"
+],
+ozet:"Bazı sürelerin çalışma süresinden sayılmasına ilişkin düzenleme.",
+metin:"Kanunda belirtilen bazı sürelerin çalışma süresinden sayılıp sayılmayacağını düzenler."
+},
+
+{
+no:"68",
+baslik:"Ara dinlenmesi",
+anahtar:[
+"mola",
+"ara dinlenmesi",
+"dinlenme",
+"çay molası",
+"yemek molası"
+],
+ozet:"Çalışma süresi içinde verilmesi gereken ara dinlenmeleri.",
+metin:"Ara dinlenmesinin süresi ve uygulanmasına ilişkin temel düzenlemedir."
+},
+
+{
+no:"69",
+baslik:"Gece süresi ve gece çalışmaları",
+anahtar:[
+"gece",
+"gece çalışması",
+"gece vardiyası",
+"vardiya",
+"gece mesaisi"
+],
+ozet:"Gece dönemi ve gece çalışmalarına ilişkin düzenleme.",
+metin:"Gece çalışmasının tanımı ve gece çalışmasına ilişkin temel hükümleri içerir."
+},
+
+{
+no:"74",
+baslik:"Analık halinde çalışma ve süt izni",
+anahtar:[
+"doğum",
+"analık",
+"hamile",
+"gebelik",
+"süt izni",
+"emzirme"
+],
+ozet:"Gebelik, doğum ve süt iznine ilişkin düzenlemeler.",
+metin:"Analık halinde çalışma ve süt izni bakımından temel düzenlemeleri içerir."
+},
+
+{
+no:"75",
+baslik:"İşçi özlük dosyası",
+anahtar:[
+"özlük dosyası",
+"işçi dosyası",
+"personel dosyası",
+"belge"
+],
+ozet:"İşverenin işçiyle ilgili belgeleri saklamasına ilişkin düzenleme.",
+metin:"İşverenin işçi hakkında düzenlemek ve saklamak zorunda olduğu belgeler bakımından temel hükümdür."
+},
+
+{
+no:"77",
+baslik:"İş sağlığı ve güvenliği",
+anahtar:[
+"iş güvenliği",
+"iş sağlığı",
+"iş kazası",
+"tehlike",
+"güvenlik",
+"isg"
+],
+ozet:"İş sağlığı ve güvenliği bakımından işverenin yükümlülükleri.",
+metin:"İşyerinde iş sağlığı ve güvenliği bakımından temel düzenlemelerden biridir."
+},
+
+{
+no:"100",
+baslik:"İdari para cezaları",
+anahtar:[
+"ceza",
+"idari para cezası",
+"işveren cezası",
+"para cezası"
+],
+ozet:"Kanunda belirtilen bazı ihlaller bakımından uygulanabilecek idari yaptırımlar.",
+metin:"İş Kanununda öngörülen bazı yükümlülüklerin ihlali halinde uygulanabilecek idari yaptırımlara ilişkin hükümler."
+}
+
+];
+
+
+function normal(metin){
+
+return metin
+.toLocaleLowerCase("tr-TR")
+.replace(/ı/g,"i")
+.replace(/ğ/g,"g")
+.replace(/ü/g,"u")
+.replace(/ş/g,"s")
+.replace(/ö/g,"o")
+.replace(/ç/g,"c");
+
+}
+
+
+function puanla(madde,arama){
+
+let puan=0;
+
+const q=normal(arama);
+
+const kelimeler=q
+.split(/\s+/)
+.filter(x=>x.length>2);
+
+
+kelimeler.forEach(kelime=>{
+
+if(normal(madde.baslik).includes(kelime)){
+puan+=5;
+}
+
+if(
+madde.anahtar.some(
+x=>normal(x).includes(kelime)
+)){
+puan+=4;
+}
+
+if(normal(madde.ozet).includes(kelime)){
+puan+=2;
+}
+
+});
+
+return puan;
+
+}
+
+
+function ara(){
+
+const arama=
+document.getElementById("arama").value.trim();
+
+const sonuc=
+document.getElementById("sonuclar");
+
+
+if(!arama){
+
+sonuc.innerHTML=`
+
+<div class="sonuc">
+
+<div class="baslik">
+📚 Konu arayın
+</div>
+
+<div class="konu">
+Örneğin: fazla mesai, yıllık izin,
+vardiya, hafta tatili, resmi tatil...
+</div>
+
+</div>
+
+`;
+
+return;
+
+}
+
+
+const bulunan=maddeler
+.map(madde=>({
+
+...madde,
+
+puan:puanla(madde,arama)
+
+}))
+
+.filter(madde=>madde.puan>0)
+
+.sort((a,b)=>b.puan-a.puan);
+
+
+if(bulunan.length===0){
+
+sonuc.innerHTML=`
+
+<div class="sonuc">
+
+<div class="baslik">
+🔍 İlgili madde bulunamadı
+</div>
+
+<div class="konu">
+Farklı kelimelerle tekrar deneyin.
+</div>
+
+</div>
+
+`;
+
+return;
+
+}
+
+
+sonuc.innerHTML=bulunan
+.map((madde,index)=>`
+
+<div
+class="sonuc"
+onclick="detayAc(${index})">
+
+<span class="puan">
+${index===0 ? "⭐ En alakalı" : "İlgili"}
+</span>
+
+<div class="baslik">
+
+Madde ${madde.no} -
+${madde.baslik}
+
+</div>
+
+<div class="konu">
+
+${madde.ozet}
+
+</div>
+
+
+<div
+id="detay-${index}"
+class="detay">
+
+<h3>
+📖 Madde ${madde.no}
+</h3>
+
+<h3>
+${madde.baslik}
+</h3>
+
+<p>
+${madde.metin}
+</p>
+
+<p>
+<strong>⚠️ Güncel tam kanun metni:</strong>
+</p>
+
+<p>
+Bu uygulamadaki açıklama yönlendirme
+amaçlıdır. Güncel mevzuat metni için
+resmî TBMM kaynağını kontrol edin.
+</p>
+
+<a
+class="resmi"
+href="https://www.tbmm.gov.tr/Yasama/Kanun/f72877bd-9f9a-037b-e050-007f01005610"
+target="_blank">
+
+📜 TBMM 4857 Sayılı İş Kanunu
+
+</a>
+
+</div>
+
+</div>
+
+`)
+.join("");
+
+}
+
+
+function detayAc(index){
+
+const detay=
+document.getElementById("detay-"+index);
+
+if(detay){
+
+detay.classList.toggle("acik");
+
+}
+
+}
+
+
+ara();
+
+</script>
+
+</body>
+</html>

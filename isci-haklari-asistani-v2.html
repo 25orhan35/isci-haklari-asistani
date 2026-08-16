@@ -1,0 +1,906 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#b5121b">
+<title>İşçi Hakları Asistanı</title>
+
+<style>
+*{box-sizing:border-box}
+
+body{
+margin:0;
+font-family:Arial,Helvetica,sans-serif;
+background:#f3f4f6;
+color:#111827;
+}
+
+header{
+background:linear-gradient(135deg,#b5121b,#7f0d14);
+color:white;
+text-align:center;
+padding:25px 15px 30px;
+}
+
+.flag{
+width:125px;
+height:125px;
+border-radius:50%;
+margin:0 auto 15px;
+overflow:hidden;
+border:5px solid white;
+box-shadow:0 5px 20px rgba(0,0,0,.35);
+}
+
+.flag svg{
+width:100%;
+height:100%;
+display:block;
+}
+
+header h1{
+margin:5px 0;
+font-size:27px;
+}
+
+header p{
+margin:8px 0 0;
+font-size:14px;
+opacity:.9;
+}
+
+nav{
+position:sticky;
+top:0;
+z-index:100;
+display:flex;
+background:white;
+box-shadow:0 2px 12px rgba(0,0,0,.15);
+}
+
+nav button{
+flex:1;
+padding:15px 4px;
+border:0;
+background:white;
+font-weight:bold;
+font-size:13px;
+cursor:pointer;
+}
+
+nav button.active{
+background:#111827;
+color:white;
+}
+
+.container{
+max-width:950px;
+margin:auto;
+padding:18px;
+}
+
+.panel{
+display:none;
+}
+
+.panel.active{
+display:block;
+}
+
+.card{
+background:white;
+border-radius:17px;
+padding:19px;
+margin-bottom:16px;
+box-shadow:0 3px 15px rgba(0,0,0,.07);
+}
+
+h2{
+margin-top:0;
+}
+
+input,textarea{
+width:100%;
+padding:14px;
+border:1px solid #cbd5e1;
+border-radius:11px;
+font-size:16px;
+outline:none;
+margin:7px 0;
+background:white;
+}
+
+textarea{
+min-height:120px;
+resize:vertical;
+}
+
+input:focus,
+textarea:focus{
+border-color:#b5121b;
+}
+
+button.main{
+width:100%;
+border:0;
+border-radius:11px;
+padding:14px;
+background:#111827;
+color:white;
+font-size:16px;
+font-weight:bold;
+cursor:pointer;
+margin-top:8px;
+}
+
+button.main:hover{
+opacity:.9;
+}
+
+.result{
+background:white;
+border-radius:16px;
+padding:18px;
+margin-bottom:14px;
+box-shadow:0 3px 13px rgba(0,0,0,.07);
+}
+
+.badge{
+display:inline-block;
+padding:5px 9px;
+border-radius:8px;
+background:#e5e7eb;
+font-size:12px;
+font-weight:bold;
+margin-bottom:8px;
+}
+
+.article{
+display:none;
+margin-top:14px;
+padding:17px;
+border-radius:12px;
+background:#f8fafc;
+line-height:1.8;
+white-space:pre-line;
+}
+
+.article.open{
+display:block;
+}
+
+.answer{
+background:#f8fafc;
+border-radius:12px;
+padding:16px;
+line-height:1.75;
+}
+
+.small{
+font-size:12px;
+line-height:1.6;
+color:#64748b;
+}
+
+.warning{
+background:#fff7ed;
+border-left:4px solid #f97316;
+padding:12px;
+border-radius:8px;
+font-size:13px;
+line-height:1.6;
+margin-top:12px;
+}
+
+.link{
+display:block;
+text-decoration:none;
+background:#111827;
+color:white;
+padding:13px;
+border-radius:10px;
+text-align:center;
+font-weight:bold;
+margin-top:10px;
+}
+
+footer{
+text-align:center;
+padding:25px;
+font-size:12px;
+color:#64748b;
+}
+
+.no-result{
+padding:20px;
+text-align:center;
+background:white;
+border-radius:14px;
+}
+
+/* mobil */
+
+@media(max-width:600px){
+
+header h1{
+font-size:23px;
+}
+
+.flag{
+width:105px;
+height:105px;
+}
+
+nav button{
+font-size:12px;
+padding:14px 2px;
+}
+
+.container{
+padding:12px;
+}
+
+.card,
+.result{
+padding:15px;
+}
+
+}
+</style>
+</head>
+
+<body>
+
+<header>
+
+<div class="flag">
+
+<svg viewBox="0 0 300 200"
+xmlns="http://www.w3.org/2000/svg">
+
+<rect width="300" height="200" fill="#e30a17"/>
+
+<circle cx="120" cy="100" r="62" fill="white"/>
+
+<circle cx="143" cy="100" r="50" fill="#e30a17"/>
+
+<polygon
+points="208,100 164,114 191,77 191,123 164,86"
+fill="white"/>
+
+</svg>
+
+</div>
+
+<h1>⚖️ İşçi Hakları Asistanı</h1>
+
+<p>4857 İş Kanunu • İşçi Hakları • Yargıtay</p>
+
+</header>
+
+
+<nav>
+
+<button class="active"
+onclick="sekme('soru',this)">
+💬 Soru
+</button>
+
+<button
+onclick="sekme('kanun',this)">
+📚 Kanun
+</button>
+
+<button
+onclick="sekme('yargitay',this)">
+🏛️ Yargıtay
+</button>
+
+</nav>
+
+
+<div class="container">
+
+
+<!-- ================================
+     SORU CEVAP
+================================ -->
+
+<section id="soru" class="panel active">
+
+<div class="card">
+
+<h2>💬 İşçi Hakları Asistanı</h2>
+
+<p>
+İşçi olarak yaşadığın sorunu yaz.
+</p>
+
+<textarea
+id="soruInput"
+placeholder="Örnek: Pazar günü çalışıyorum. Hafta tatili ücretimi alabilir miyim?">
+</textarea>
+
+<button
+class="main"
+onclick="soruSor()">
+Soruyu Cevapla
+</button>
+
+</div>
+
+<div id="cevap"></div>
+
+</section>
+
+
+<!-- ================================
+     KANUN
+================================ -->
+
+<section id="kanun" class="panel">
+
+<div class="card">
+
+<h2>📚 4857 Sayılı İş Kanunu</h2>
+
+<input
+id="kanunInput"
+oninput="kanunAra()"
+placeholder="Madde numarası veya konu ara...">
+
+<p class="small">
+Örnek: 63, fazla mesai, pazar, yıllık izin,
+mola, gece vardiyası, ücret
+</p>
+
+</div>
+
+<div id="kanunSonuc"></div>
+
+</section>
+
+
+<!-- ================================
+     YARGITAY
+================================ -->
+
+<section id="yargitay" class="panel">
+
+<div class="card">
+
+<h2>🏛️ Yargıtay Kararları</h2>
+
+<input
+id="yargitayInput"
+oninput="yargitayAra()"
+placeholder="Esas, karar veya konu ara...">
+
+<p class="small">
+Örnek: 2017/24115, 2019/17734,
+fazla çalışma, eşit davranma
+</p>
+
+</div>
+
+<div id="yargitaySonuc"></div>
+
+</section>
+
+</div>
+
+
+<footer>
+İşçi Hakları Asistanı<br>
+Genel bilgilendirme amaçlıdır.
+</footer>
+
+
+<script>
+
+/* ==================================================
+   SEKME
+================================================== */
+
+function sekme(id,button){
+
+document
+.querySelectorAll(".panel")
+.forEach(x=>x.classList.remove("active"));
+
+document
+.getElementById(id)
+.classList.add("active");
+
+document
+.querySelectorAll("nav button")
+.forEach(x=>x.classList.remove("active"));
+
+button.classList.add("active");
+
+}
+
+
+/* ==================================================
+   ARAMA NORMALİZASYONU
+================================================== */
+
+function norm(x){
+
+return String(x || "")
+.toLocaleLowerCase("tr-TR")
+.replace(/ı/g,"i")
+.replace(/ğ/g,"g")
+.replace(/ü/g,"u")
+.replace(/ş/g,"s")
+.replace(/ö/g,"o")
+.replace(/ç/g,"c")
+.replace(/\s+/g," ")
+.trim();
+
+}
+
+
+/* ==================================================
+   4857 SAYILI İŞ KANUNU
+================================================== */
+
+const kanun = [
+
+{
+no:1,
+baslik:"Amaç ve kapsam",
+anahtar:"amaç kapsam iş kanunu",
+metin:`Bu Kanunun amacı işverenler ile bir iş sözleşmesine dayanarak çalıştırılan işçilerin çalışma şartları ve çalışma ortamına ilişkin hak ve sorumluluklarını düzenlemektir.
+
+Bu Kanun, 4 üncü Maddedeki istisnalar dışında kalan bütün işyerlerine, bu işyerlerinin işverenleri ile işveren vekillerine ve işçilerine faaliyet konularına bakılmaksızın uygulanır.`
+},
+
+{
+no:2,
+baslik:"Tanımlar",
+anahtar:"işçi işveren işyeri işveren vekili",
+metin:`Bir iş sözleşmesine dayanarak çalışan gerçek kişiye işçi, işçi çalıştıran gerçek veya tüzel kişiye yahut tüzel kişiliği olmayan kurum ve kuruluşlara işveren, işçi ile işveren arasında kurulan ilişkiye iş ilişkisi denir.
+
+İşveren tarafından mal veya hizmet üretmek amacıyla maddî olan ve olmayan unsurlar ile işçinin birlikte örgütlendiği birime işyeri denir.`
+},
+
+{
+no:5,
+baslik:"Eşit davranma ilkesi",
+anahtar:"eşit davranma ayrımcılık cinsiyet dil din mezhep renk",
+metin:`İş ilişkisinde dil, ırk, renk, cinsiyet, engellilik, siyasal düşünce, felsefî inanç, din ve mezhep ve benzeri sebeplere dayalı ayrım yapılamaz.
+
+İşveren, esaslı sebepler olmadıkça tam süreli çalışan işçi karşısında kısmî süreli çalışan işçiye, belirsiz süreli çalışan işçi karşısında belirli süreli çalışan işçiye farklı işlem yapamaz.
+
+İşveren, biyolojik veya işin niteliğine ilişkin sebepler zorunlu kılmadıkça, bir işçiye, iş sözleşmesinin yapılmasında, şartlarının oluşturulmasında, uygulanmasında ve sona ermesinde, cinsiyet veya gebelik nedeniyle doğrudan veya dolaylı farklı işlem yapamaz.`
+},
+
+{
+no:8,
+baslik:"İş sözleşmesi",
+anahtar:"iş sözleşmesi sözleşme çalışma",
+metin:`İş sözleşmesi, bir tarafın bağımlı olarak iş görmeyi, diğer tarafın da ücret ödemeyi üstlenmesinden oluşan sözleşmedir.
+
+İş sözleşmesi, Kanunda aksi belirtilmedikçe, özel bir şekle tabi değildir.`
+},
+
+{
+no:18,
+baslik:"Feshin geçerli sebebe dayandırılması",
+anahtar:"fesih işe iade geçerli sebep işten çıkarma",
+metin:`Otuz veya daha fazla işçi çalıştıran işyerlerinde en az altı aylık kıdemi olan işçinin belirsiz süreli iş sözleşmesini fesheden işveren, işçinin yeterliliğinden veya davranışlarından ya da işletmenin, işyerinin veya işin gereklerinden kaynaklanan geçerli bir sebebe dayanmak zorundadır.`
+},
+
+{
+no:19,
+baslik:"Sözleşmenin feshinde usul",
+anahtar:"fesih bildirim yazılı sebep işten çıkarma",
+metin:`İşveren fesih bildirimini yazılı olarak yapmak ve fesih sebebini açık ve kesin bir şekilde belirtmek zorundadır.`
+},
+
+{
+no:20,
+baslik:"Fesih bildirimine itiraz",
+anahtar:"işe iade dava arabulucu fesih",
+metin:`İş sözleşmesi feshedilen işçi, fesih bildiriminde sebep gösterilmediği veya gösterilen sebebin geçerli bir sebep olmadığı iddiası ile fesih bildiriminin tebliği tarihinden itibaren bir ay içinde işe iade talebiyle, İş Mahkemeleri Kanunu hükümleri uyarınca arabulucuya başvurmak zorundadır.`
+},
+
+{
+no:21,
+baslik:"Geçersiz sebeple yapılan feshin sonuçları",
+anahtar:"işe iade tazminat boşta geçen süre",
+metin:`İşverence geçerli sebep gösterilmediği veya gösterilen sebebin geçerli olmadığı mahkemece veya özel hakem tarafından tespit edilerek feshin geçersizliğine karar verildiğinde, işveren işçiyi bir ay içinde işe başlatmak zorundadır.
+
+İşçiyi başvurusu üzerine işveren bir ay içinde işe başlatmaz ise, işçiye en az dört aylık ve en çok sekiz aylık ücreti tutarında tazminat ödemekle yükümlü olur.`
+},
+
+{
+no:24,
+baslik:"İşçinin haklı nedenle derhal fesih hakkı",
+anahtar:"haklı fesih işçi sağlık ücret ahlak",
+metin:`Süresi belirli olsun veya olmasın işçi, Kanunda belirtilen hallerde iş sözleşmesini sürenin bitiminden önce veya bildirim süresini beklemeksizin feshedebilir.`
+},
+
+{
+no:25,
+baslik:"İşverenin haklı nedenle derhal fesih hakkı",
+anahtar:"işveren haklı fesih devamsızlık doğruluk",
+metin:`Süresi belirli olsun veya olmasın işveren, Kanunda belirtilen hallerde iş sözleşmesini sürenin bitiminden önce veya bildirim süresini beklemeksizin feshedebilir.`
+},
+
+{
+no:32,
+baslik:"Ücret ve ücretin ödenmesi",
+anahtar:"ücret maaş ücret ödeme maaş ödeme",
+metin:`Genel anlamda ücret bir kimseye bir iş karşılığında işveren veya üçüncü kişiler tarafından sağlanan ve para ile ödenen tutardır.
+
+Ücret, prim, ikramiye ve bu nitelikteki her çeşit istihkak, kural olarak, Türk parası ile işyerinde veya özel olarak açılan bir banka hesabına ödenir.`
+},
+
+{
+no:34,
+baslik:"Ücretin gününde ödenmemesi",
+anahtar:"ücret gecikmesi maaş ödenmemesi",
+metin:`Ücreti ödeme gününden itibaren yirmi gün içinde mücbir bir neden dışında ödenmeyen işçi, iş görme borcunu yerine getirmekten kaçınabilir.
+
+Bu nedenle kişisel kararları nedeniyle işçilerin toplu olarak çalışmaması grev olarak nitelendirilemez.`
+},
+
+{
+no:41,
+baslik:"Fazla çalışma ücreti",
+anahtar:"fazla çalışma fazla mesai mesai ücret 45 saat",
+metin:`Ülkenin genel yararları yahut işin niteliği veya üretimin artırılması gibi nedenlerle fazla çalışma yapılabilir.
+
+Fazla çalışma, Kanunda yazılı koşullar çerçevesinde, haftalık kırkbeş saati aşan çalışmalardır.
+
+Her bir saat fazla çalışma için verilecek ücret normal çalışma ücretinin saat başına düşen miktarının yüzde elli yükseltilmesi suretiyle ödenir.`
+},
+
+{
+no:46,
+baslik:"Hafta tatili",
+anahtar:"hafta tatili pazar pazar günü dinlenme",
+metin:`Bu Kanun kapsamına giren işyerlerinde, işçilere tatil gününden önce belirlenen iş günlerinde çalışmış olmaları koşuluyla, yedi günlük bir zaman dilimi içinde kesintisiz en az yirmidört saat dinlenme, hafta tatili verilir.
+
+Çalışılmayan hafta tatili günü için işveren tarafından bir iş karşılığı olmaksızın o günün ücreti tam olarak ödenir.`
+},
+
+{
+no:47,
+baslik:"Ulusal bayram ve genel tatil ücreti",
+anahtar:"bayram resmi tatil genel tatil ücret",
+metin:`Bu Kanun kapsamına giren işyerlerinde çalışan işçilere, kanunlarda ulusal bayram ve genel tatil günü olarak kabul edilen günlerde çalışmazlarsa, bir iş karşılığı olmaksızın o günün ücretleri tam olarak, tatil yapmayarak çalışırlarsa ayrıca çalışılan her gün için bir günlük ücreti ödenir.`
+},
+
+{
+no:53,
+baslik:"Yıllık ücretli izin hakkı",
+anahtar:"yıllık izin izin kıdem yıllık ücretli izin",
+metin:`İşyerinde işe başladığı günden itibaren, deneme süresi de içinde olmak üzere, en az bir yıl çalışmış olan işçilere yıllık ücretli izin verilir.
+
+Yıllık ücretli izin hakkından vazgeçilemez.
+
+İşçilerin yıllık ücretli izin süresi, hizmet süresi;
+a) Bir yıldan beş yıla kadar (beş yıl dahil) olanlara ondört günden,
+b) Beş yıldan fazla onbeş yıldan az olanlara yirmi günden,
+c) Onbeş yıl (dahil) ve daha fazla olanlara yirmialtı günden,
+az olamaz.`
+},
+
+{
+no:54,
+baslik:"Yıllık ücretli izne hak kazanma",
+anahtar:"yıllık izin hak kazanma kıdem",
+metin:`Yıllık ücretli izne hak kazanmak için gerekli sürenin hesabında işçilerin, aynı işverenin bir veya çeşitli işyerlerinde çalıştıkları süreler birleştirilerek göz önüne alınır.`
+},
+
+{
+no:56,
+baslik:"Yıllık ücretli iznin uygulanması",
+anahtar:"yıllık izin kullanım izin bölme",
+metin:`Yıllık ücretli izin işveren tarafından bölünemez.
+
+Ancak, izin süreleri, tarafların anlaşması ile bir bölümü on günden aşağı olmamak üzere bölümler halinde kullanılabilir.`
+},
+
+{
+no:57,
+baslik:"Yıllık izin ücretinin ödenmesi",
+anahtar:"yıllık izin ücreti izin parası",
+metin:`İşveren, yıllık ücretli iznini kullanan her işçiye, yıllık izin dönemine ilişkin ücretini ilgili döneme ait ücret ödemesinden önce peşin olarak veya avans şeklinde ödemek zorundadır.`
+},
+
+{
+no:59,
+baslik:"İş sözleşmesinin sona ermesinde izin ücreti",
+anahtar:"işten ayrılma kullanılmayan izin izin parası",
+metin:`İş sözleşmesinin, herhangi bir nedenle sona ermesi halinde işçinin hak kazanıp da kullanmadığı yıllık izin sürelerine ait ücreti, sözleşmenin sona erdiği tarihteki ücreti üzerinden kendisine veya hak sahiplerine ödenir.`
+},
+
+{
+no:63,
+baslik:"Çalışma süresi",
+anahtar:"çalışma süresi 45 saat haftalık süre denkleştirme",
+metin:`Genel bakımdan çalışma süresi haftada en çok kırkbeş saattir.
+
+Aksi kararlaştırılmamışsa bu süre, işyerlerinde haftanın çalışılan günlerine eşit ölçüde bölünerek uygulanır.
+
+Tarafların anlaşması ile haftalık normal çalışma süresi, işyerlerinde haftanın çalışılan günlerine, günde onbir saati aşmamak koşulu ile farklı şekilde dağıtılabilir.`
+},
+
+{
+no:64,
+baslik:"Denkleştirme",
+anahtar:"denkleştirme çalışma süresi fazla mesai",
+metin:`Tarafların anlaşması ile haftalık normal çalışma süresinin, işyerlerinde haftanın çalışılan günlerine günde onbir saati aşmamak koşulu ile farklı şekilde dağıtılması suretiyle uygulanan çalışma düzeninde denkleştirme yapılabilir.`
+},
+
+{
+no:68,
+baslik:"Ara dinlenmesi",
+anahtar:"mola yemek dinlenme ara dinlenmesi",
+metin:`Günlük çalışma süresinin ortalama bir zamanında o yerin gelenekleri ve işin gereğine göre ayarlanmak suretiyle işçilere ara dinlenmesi verilir.
+
+Ara dinlenmeleri;
+a) Dört saat veya daha kısa süreli işlerde onbeş dakika,
+b) Dört saatten fazla ve yedibuçuk saate kadar süreli işlerde yarım saat,
+c) Yedibuçuk saatten fazla süreli işlerde bir saat,
+olarak uygulanır.`
+},
+
+{
+no:69,
+baslik:"Gece süresi ve gece çalışmaları",
+anahtar:"gece vardiyası gece çalışması gece süresi",
+metin:`Çalışma hayatında gece en geç saat 20.00'de başlayarak en erken saat 06.00'ya kadar geçen ve her halde en fazla onbir saat süren dönemdir.
+
+İşçilerin gece çalışmaları yedibuçuk saati geçemez.`
+},
+
+{
+no:74,
+baslik:"Analık halinde çalışma ve süt izni",
+anahtar:"gebelik hamile doğum süt izni kadın işçi",
+metin:`Kadın işçilerin doğumdan önce sekiz ve doğumdan sonra sekiz hafta olmak üzere toplam onaltı haftalık süre için çalıştırılmamaları esastır.
+
+Kadın işçilere bir yaşından küçük çocuklarını emzirmeleri için günde toplam birbuçuk saat süt izni verilir.`
+}
+
+];
+
+
+/* ==================================================
+   KANUN ARAMA
+================================================== */
+
+function kanunAra(){
+
+const q=
+norm(document.getElementById("kanunInput").value);
+
+const alan=
+document.getElementById("kanunSonuc");
+
+if(!q){
+alan.innerHTML="";
+return;
+}
+
+let sonuc=[];
+
+
+/* MADDE NUMARASI */
+
+if(/^\d+$/.test(q)){
+
+sonuc=
+kanun.filter(x=>x.no===Number(q));
+
+}
+
+
+/* KONU */
+
+else{
+
+const kelimeler=q.split(" ");
+
+sonuc=
+kanun
+.map(x=>{
+
+const metin=
+norm(
+x.baslik+" "+
+x.anahtar+" "+
+x.metin
+);
+
+let puan=0;
+
+kelimeler.forEach(k=>{
+
+if(metin.includes(k))
+puan++;
+
+});
+
+return {...x,puan};
+
+})
+.filter(x=>x.puan>0)
+.sort((a,b)=>b.puan-a.puan);
+
+}
+
+
+if(!sonuc.length){
+
+alan.innerHTML=`
+<div class="no-result">
+🔍 İlgili madde bulunamadı.
+</div>
+`;
+
+return;
+}
+
+
+alan.innerHTML=
+sonuc
+.map(x=>`
+
+<div class="result">
+
+<span class="badge">
+📚 4857 Sayılı İş Kanunu
+</span>
+
+<h3>
+Madde ${x.no} - ${x.baslik}
+</h3>
+
+<button
+class="main"
+onclick="maddeAc(${x.no})">
+📖 Maddeyi Oku
+</button>
+
+<div
+id="m${x.no}"
+class="article">
+
+<strong>
+MADDE ${x.no} - ${x.baslik}
+</strong>
+
+<p>
+${x.metin}
+</p>
+
+</div>
+
+</div>
+
+`)
+.join("");
+
+}
+
+
+/* ==================================================
+   MADDE AÇ
+================================================== */
+
+function maddeAc(no){
+
+const el=
+document.getElementById("m"+no);
+
+if(!el)return;
+
+el.classList.toggle("open");
+
+}
+
+
+/* ==================================================
+   SORU CEVAP
+================================================== */
+
+const cevaplar={
+
+mesai:[
+"Fazla çalışma konusunda 4857 sayılı İş Kanunu'nun 41. maddesi temel hükümdür. Haftalık çalışma süresi bakımından 63. madde de önemlidir.",
+"Fazla çalışma iddiasında vardiya çizelgesi, puantaj, bordro ve fiili çalışma saatleri birlikte değerlendirilmelidir.",
+"Haftalık 45 saati aşan çalışmalar fazla çalışma bakımından önem taşır. Ancak denkleştirme ve özel çalışma düzenleri ayrıca incelenmelidir."
+],
+
+pazar:[
+"Pazar gününün sizin hafta tatiliniz olup olmadığı öncelikle belirlenmelidir. 46. madde bu konuda temel hükümdür.",
+"Pazar günü çalışmanız tek başına yeterli değildir. Haftalık dinlenme gününüzün nasıl belirlendiğine bakmak gerekir.",
+"Hafta tatilinde çalışmada çalışma programı, vardiya düzeni ve hafta tatilinin kullandırılıp kullandırılmadığı önemlidir."
+],
+
+izin:[
+"Yıllık ücretli izin hakkının temel düzenlemesi 53. maddedir.",
+"Yıllık izin hesabında işverene bağlı çalışma süreleri ve kıdem önemlidir.",
+"Kullanılmayan yıllık izinler iş sözleşmesinin sona ermesi halinde ayrıca ücret alacağına dönüşebilir."
+],
+
+vardiya:[
+"Vardiyalı çalışmada haftalık çalışma süresi ve günlük çalışma sınırları önemlidir. 63. maddeye bakılmalıdır.",
+"Gece vardiyası bakımından 69. madde ayrıca önem taşır.",
+"Vardiya düzeni değerlendirilirken çalışma süresi, dinlenme ve varsa toplu iş sözleşmesi birlikte incelenmelidir."
+],
+
+mola:[
+"Ara dinlenmesi 68. maddede düzenlenmiştir.",
+"Çalışma süresine göre verilmesi gereken ara dinlenmesi değişir.",
+"Mola kullandırılmadığını düşünüyorsanız vardiya ve çalışma saatlerinizi belgelemek faydalı olur."
+],
+
+ucret:[
+"Ücret konusunda 32. madde temel düzenlemelerden biridir.",
+"Ücretiniz eksik veya geç ödeniyorsa bordro ile banka kayıtlarını karşılaştırın.",
+"Ücret alacağı değerlendirilirken fiili çalışma, bordro ve ödeme kayıtları birlikte incelenmelidir."
+],
+
+fesih:[
+"İşten çıkarılmanın hukuka uygunluğu fesih nedenine ve işyerindeki koşullara göre değişir.",
+"İşe iade açısından 18, 19, 20 ve 21. maddeler önem taşır.",
+"Fesih bildiriminizi, bordrolarınızı ve işten ayrılış belgelerinizi saklamanız önemlidir."
+],
+
+genel:[
+"Bu konunun sonucu olayın ayrıntılarına göre değişebilir.",
+"İş hukukunda aynı olay farklı şartlarda farklı sonuç doğurabilir.",
+"Kesin değerlendirme için çalışma düzeni, sözleşme ve işverenin yaptığı işlem birlikte incelenmelidir."
+]
+
+};
+
+
+function sec(liste){
+
+return liste[
+Math.floor(Math.random()*liste.length)
+];
+
+}
+
+
+function soruSor(){
+
+const q=
+norm(document.getElementById("soruInput").value);
+
+const alan=
+document.getElementById("cevap");
+
+if(!q){
+
+alan.innerHTML=
+`<div class="card">
+⚠️ Önce sorunuzu yazın.
+</div>`;
+
+return;
+}
+
+let cevap;
+let konu;
+let ilgili=[];
+
+
+/* FAZLA MESAİ */
+
+if(
+q.includes("mesai") ||
+q.includes("fazla")
+){
+
+cevap=sec(cevaplar

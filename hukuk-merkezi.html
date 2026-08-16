@@ -1,0 +1,836 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>İşçi Hakları Asistanı</title>
+
+<style>
+*{box-sizing:border-box}
+
+body{
+margin:0;
+font-family:Arial,sans-serif;
+background:#f3f4f6;
+color:#111827
+}
+
+header{
+background:#111827;
+color:white;
+padding:28px 15px;
+text-align:center
+}
+
+header h1{margin:0;font-size:26px}
+header p{color:#cbd5e1}
+
+nav{
+display:flex;
+background:white;
+position:sticky;
+top:0;
+z-index:10;
+box-shadow:0 2px 10px #ddd
+}
+
+nav button{
+flex:1;
+border:0;
+background:white;
+padding:15px 5px;
+font-weight:bold;
+cursor:pointer;
+font-size:14px
+}
+
+nav button.active{
+background:#111827;
+color:white
+}
+
+.container{
+max-width:850px;
+margin:auto;
+padding:18px
+}
+
+.panel{display:none}
+.panel.active{display:block}
+
+.card{
+background:white;
+padding:18px;
+border-radius:15px;
+margin-bottom:14px;
+box-shadow:0 3px 12px rgba(0,0,0,.06)
+}
+
+input,textarea{
+width:100%;
+padding:14px;
+border:1px solid #d1d5db;
+border-radius:10px;
+font-size:16px;
+margin-bottom:10px
+}
+
+textarea{min-height:120px}
+
+.primary{
+width:100%;
+padding:14px;
+border:0;
+border-radius:10px;
+background:#111827;
+color:white;
+font-weight:bold;
+font-size:16px;
+cursor:pointer
+}
+
+.result{
+background:white;
+padding:17px;
+border-radius:14px;
+margin-bottom:12px;
+box-shadow:0 3px 12px rgba(0,0,0,.06);
+cursor:pointer
+}
+
+.result:hover{background:#f8fafc}
+
+.result h3{
+margin:0 0 8px
+}
+
+.badge{
+display:inline-block;
+padding:5px 8px;
+border-radius:7px;
+background:#eef2ff;
+font-size:12px;
+margin-bottom:8px
+}
+
+.detail{
+display:none;
+margin-top:15px;
+padding:15px;
+background:#f8fafc;
+border-radius:10px;
+line-height:1.7
+}
+
+.detail.open{display:block}
+
+.source{
+display:block;
+margin-top:15px;
+padding:12px;
+border-radius:9px;
+background:#111827;
+color:white;
+text-align:center;
+text-decoration:none
+}
+
+.answer{
+line-height:1.7;
+background:#f8fafc;
+padding:15px;
+border-radius:10px
+}
+
+.warning{
+font-size:12px;
+color:#64748b;
+line-height:1.5
+}
+</style>
+</head>
+
+<body>
+
+<header>
+<h1>⚖️ İşçi Hakları Asistanı</h1>
+<p>İş hukuku, kanun ve Yargıtay kararları</p>
+</header>
+
+<nav>
+<button class="active" onclick="sekme('soru',this)">💬 Soru-Cevap</button>
+<button onclick="sekme('kanun',this)">📚 İşçi Kanunu</button>
+<button onclick="sekme('yargitay',this)">🏛️ Yargıtay</button>
+</nav>
+
+<div class="container">
+
+<!-- SORU CEVAP -->
+
+<section id="soru" class="panel active">
+
+<div class="card">
+
+<h2>💬 İşçi Hakları Asistanı</h2>
+
+<textarea id="soruInput"
+placeholder="Örneğin: Pazar günü çalıştım, fazla mesai ücretim nasıl hesaplanır?"></textarea>
+
+<button class="primary" onclick="soruSor()">
+Soruyu Değerlendir
+</button>
+
+</div>
+
+<div id="cevap"></div>
+
+</section>
+
+
+<!-- KANUN -->
+
+<section id="kanun" class="panel">
+
+<div class="card">
+
+<h2>📚 4857 Sayılı İş Kanunu</h2>
+
+<input
+id="kanunAra"
+placeholder="Örneğin: fazla mesai, yıllık izin, vardiya, pazar..."
+oninput="kanunAra()">
+
+</div>
+
+<div id="kanunSonuc"></div>
+
+</section>
+
+
+<!-- YARGITAY -->
+
+<section id="yargitay" class="panel">
+
+<div class="card">
+
+<h2>🏛️ Yargıtay Kararları</h2>
+
+<input
+id="yargitayAra"
+placeholder="Örneğin: fazla mesai, vardiya, hafta tatili..."
+oninput="yargitayAra()">
+
+</div>
+
+<div id="yargitaySonuc">
+
+<div class="card">
+Yargıtay kararı aramak için konu yazın.
+</div>
+
+</div>
+
+</section>
+
+</div>
+
+
+<script>
+
+/* SEKME */
+
+function sekme(id,buton){
+
+document.querySelectorAll(".panel")
+.forEach(x=>x.classList.remove("active"));
+
+document.getElementById(id)
+.classList.add("active");
+
+document.querySelectorAll("nav button")
+.forEach(x=>x.classList.remove("active"));
+
+buton.classList.add("active");
+
+}
+
+
+/* KANUN VERİLERİ */
+
+const kanunlar=[
+
+{
+n:1,
+b:"Amaç ve kapsam",
+k:["amaç","kapsam","iş kanunu"],
+d:"İş Kanununun amacı ve kapsamına ilişkin temel düzenlemedir."
+},
+
+{
+n:2,
+b:"Tanımlar",
+k:["işçi","işveren","işyeri","işveren vekili","alt işveren"],
+d:"İşçi, işveren, işyeri ve işveren vekili gibi temel kavramları düzenler."
+},
+
+{
+n:5,
+b:"Eşit davranma ilkesi",
+k:["eşitlik","eşit davranma","ayrımcılık","ayrım"],
+d:"İş ilişkisinde işverenin eşit davranma yükümlülüğüne ilişkin düzenlemedir."
+},
+
+{
+n:17,
+b:"Belirsiz süreli iş sözleşmesinin feshi",
+k:["fesih","işten çıkarma","belirsiz süre","iş akdi"],
+d:"Belirsiz süreli iş sözleşmesinin feshine ilişkin düzenlemedir."
+},
+
+{
+n:18,
+b:"Feshin geçerli sebebe dayandırılması",
+k:["işe iade","geçerli neden","geçerli sebep","fesih","işten çıkarma"],
+d:"İş güvencesi ve fesihte geçerli sebep bakımından temel maddelerden biridir."
+},
+
+{
+n:24,
+b:"İşçinin haklı nedenle derhal fesih hakkı",
+k:["haklı fesih","işçi feshi","ücret ödenmiyor","maaş ödenmiyor","sağlık"],
+d:"İşçinin belirli durumlarda iş sözleşmesini derhal feshetme hakkını düzenler."
+},
+
+{
+n:25,
+b:"İşverenin haklı nedenle derhal fesih hakkı",
+k:["işveren feshi","haklı fesih","devamsızlık","işten çıkarma"],
+d:"İşverenin belirli durumlarda sözleşmeyi derhal feshetmesine ilişkin düzenlemedir."
+},
+
+{
+n:32,
+b:"Ücret ve ücretin ödenmesi",
+k:["ücret","maaş","ödeme","asgari ücret","maaş ödemesi"],
+d:"İşçinin ücret hakkı ve ücretin ödenmesine ilişkin temel düzenlemedir."
+},
+
+{
+n:34,
+b:"Ücretin gününde ödenmemesi",
+k:["maaş gecikmesi","ücret gecikmesi","maaş ödenmiyor","ücret ödenmiyor"],
+d:"Ücretin zamanında ödenmemesi halinde işçinin hakları bakımından önemlidir."
+},
+
+{
+n:41,
+b:"Fazla çalışma",
+k:["fazla mesai","fazla çalışma","mesai","mesai ücreti","fazla saat"],
+d:"Fazla çalışma ve fazla çalışma ücretine ilişkin temel düzenlemedir."
+},
+
+{
+n:46,
+b:"Hafta tatili",
+k:["hafta tatili","pazar","pazar çalışması","haftalık izin"],
+d:"Hafta tatili hakkı ve hafta tatilinde çalışmaya ilişkin düzenlemedir."
+},
+
+{
+n:47,
+b:"Ulusal bayram ve genel tatil",
+k:["resmi tatil","bayram","ubgt","genel tatil","1 mayıs","23 nisan","29 ekim"],
+d:"Ulusal bayram ve genel tatil günlerinde çalışma ve ücretlendirmeye ilişkin düzenlemedir."
+},
+
+{
+n:53,
+b:"Yıllık ücretli izin",
+k:["yıllık izin","senelik izin","izin hakkı","izin süresi"],
+d:"Yıllık ücretli izin hakkının temel düzenlemesidir."
+},
+
+{
+n:54,
+b:"Yıllık ücretli izne hak kazanma",
+k:["yıllık izin","izin kazanma","kıdem","çalışma süresi"],
+d:"Yıllık ücretli izne hak kazanma şartlarını düzenler."
+},
+
+{
+n:55,
+b:"Yıllık izin bakımından çalışılmış gibi sayılan haller",
+k:["yıllık izin","çalışılmış sayılır","izin hesabı"],
+d:"Bazı sürelerin yıllık izin bakımından çalışılmış gibi değerlendirilmesini düzenler."
+},
+
+{
+n:56,
+b:"Yıllık ücretli iznin uygulanması",
+k:["yıllık izin","izin kullanma","izin bölme","izin kullanımı"],
+d:"Yıllık ücretli iznin kullanılmasına ilişkin düzenlemedir."
+},
+
+{
+n:57,
+b:"Yıllık izin ücretinin ödenmesi",
+k:["izin parası","izin ücreti","yıllık izin ücreti"],
+d:"Yıllık izin dönemindeki ücretin ödenmesine ilişkin düzenlemedir."
+},
+
+{
+n:63,
+b:"Çalışma süresi",
+k:["çalışma süresi","45 saat","haftalık çalışma","çalışma saati","vardiya","11 saat","denkleştirme"],
+d:"Haftalık çalışma süresi, günlük çalışma sınırı ve denkleştirme bakımından temel düzenlemedir."
+},
+
+{
+n:66,
+b:"Çalışma süresinden sayılan haller",
+k:["çalışma süresi","işyerinde geçirilen süre","çalışma süresinden sayılır"],
+d:"Bazı sürelerin çalışma süresinden sayılmasına ilişkin düzenlemedir."
+},
+
+{
+n:68,
+b:"Ara dinlenmesi",
+k:["mola","ara dinlenmesi","dinlenme","çay molası","yemek molası"],
+d:"Çalışma sırasında verilmesi gereken ara dinlenmelerine ilişkin düzenlemedir."
+},
+
+{
+n:69,
+b:"Gece süresi ve gece çalışmaları",
+k:["gece","gece çalışması","gece vardiyası","vardiya","gece mesaisi"],
+d:"Gece dönemi ve gece çalışmalarına ilişkin temel düzenlemedir."
+},
+
+{
+n:74,
+b:"Analık halinde çalışma ve süt izni",
+k:["doğum","analık","hamile","gebelik","süt izni","emzirme"],
+d:"Gebelik, doğum ve süt iznine ilişkin düzenlemeleri içerir."
+},
+
+{
+n:75,
+b:"İşçi özlük dosyası",
+k:["özlük dosyası","işçi dosyası","personel dosyası","belge"],
+d:"İşverenin işçiyle ilgili belgeleri saklamasına ilişkin düzenlemedir."
+}
+
+];
+
+
+function normal(x){
+
+return x.toLocaleLowerCase("tr-TR")
+.replace(/ı/g,"i")
+.replace(/ğ/g,"g")
+.replace(/ü/g,"u")
+.replace(/ş/g,"s")
+.replace(/ö/g,"o")
+.replace(/ç/g,"c");
+
+}
+
+
+function kanunAra(){
+
+let q=normal(
+document.getElementById("kanunAra").value.trim()
+);
+
+let alan=document.getElementById("kanunSonuc");
+
+if(!q){
+
+alan.innerHTML="";
+return;
+}
+
+let kelimeler=q.split(/\s+/);
+
+let sonuc=kanunlar.map(m=>{
+
+let puan=0;
+
+kelimeler.forEach(x=>{
+
+if(normal(m.b).includes(x)) puan+=6;
+
+m.k.forEach(y=>{
+if(normal(y).includes(x)) puan+=4;
+});
+
+if(normal(m.d).includes(x)) puan+=2;
+
+});
+
+return {...m,puan};
+
+})
+.filter(x=>x.puan>0)
+.sort((a,b)=>b.puan-a.puan);
+
+
+if(!sonuc.length){
+
+alan.innerHTML=`
+<div class="card">
+🔍 İlgili kanun maddesi bulunamadı.
+</div>`;
+return;
+}
+
+
+alan.innerHTML=sonuc.map((m,i)=>`
+
+<div class="result" onclick="detay(${m.n})">
+
+<span class="badge">
+${i===0?"⭐ En alakalı":"İlgili madde"}
+</span>
+
+<h3>
+Madde ${m.n} - ${m.b}
+</h3>
+
+<p>${m.d}</p>
+
+<div id="d${m.n}" class="detail">
+
+<h3>📖 Madde ${m.n}</h3>
+
+<p>
+<strong>${m.b}</strong>
+</p>
+
+<p>
+${m.d}
+</p>
+
+<p class="warning">
+Bu bölüm uygulamada konuya ilişkin açıklama
+sağlar. Güncel tam kanun metni için resmî
+mevzuat kaynağı kontrol edilmelidir.
+</p>
+
+<a
+class="source"
+target="_blank"
+href="https://www.tbmm.gov.tr/Yasama/Kanun/f72877bd-9f9a-037b-e050-007f01005610">
+
+📜 4857 Sayılı İş Kanunu - TBMM
+
+</a>
+
+</div>
+
+</div>
+
+`).join("");
+
+}
+
+
+function detay(no){
+
+let x=document.getElementById("d"+no);
+
+if(x) x.classList.toggle("open");
+
+}
+
+
+/* YARGITAY */
+
+let kararlar=[];
+
+
+async function kararYukle(){
+
+try{
+
+let cevap=
+await fetch("yargitay-kararlari.json");
+
+let veri=
+await cevap.json();
+
+kararlar=veri.kararlar||[];
+
+}
+
+catch(e){
+
+console.log("Karar verisi yüklenemedi");
+
+}
+
+}
+
+
+function yargitayAra(){
+
+let q=normal(
+document.getElementById("yargitayAra").value.trim()
+);
+
+let alan=
+document.getElementById("yargitaySonuc");
+
+if(!q){
+
+alan.innerHTML=`
+<div class="card">
+🏛️ Yargıtay kararlarını aramak için konu yazın.
+</div>`;
+return;
+}
+
+
+let kelimeler=q.split(/\s+/);
+
+
+let sonuc=kararlar.map(k=>{
+
+let metin=normal(
+(k.konu||"")+" "+
+(k.ozet||"")+" "+
+(k.sonuc||"")+" "+
+(k.anahtar_kelimeler||[]).join(" ")
+);
+
+let puan=0;
+
+kelimeler.forEach(x=>{
+if(metin.includes(x)) puan++;
+});
+
+return {...k,puan};
+
+})
+.filter(x=>x.puan>0)
+.sort((a,b)=>b.puan-a.puan);
+
+
+if(!sonuc.length){
+
+alan.innerHTML=`
+<div class="card">
+🔍 Bu konuda kayıtlı Yargıtay kararı bulunamadı.
+</div>`;
+return;
+}
+
+
+alan.innerHTML=sonuc.map(k=>`
+
+<div class="result">
+
+<span class="badge">
+🏛️ Yargıtay
+</span>
+
+<h3>
+${k.daire||""}
+</h3>
+
+<p>
+<strong>Esas:</strong>
+${k.esas_no||""}
+</p>
+
+<p>
+<strong>Karar:</strong>
+${k.karar_no||""}
+</p>
+
+<p>
+<strong>Konu:</strong>
+${k.konu||""}
+</p>
+
+<p>
+${k.ozet||""}
+</p>
+
+<p>
+<strong>Sonuç:</strong>
+${k.sonuc||""}
+</p>
+
+</div>
+
+`).join("");
+
+}
+
+
+/* SORU CEVAP */
+
+function soruSor(){
+
+let q=normal(
+document.getElementById("soruInput").value
+);
+
+let alan=document.getElementById("cevap");
+
+
+if(!q.trim()){
+
+alan.innerHTML=`
+<div class="card">
+Lütfen bir soru yazın.
+</div>`;
+
+return;
+}
+
+
+let cevap="";
+
+if(
+q.includes("fazla") ||
+q.includes("mesai")
+){
+
+cevap=`
+<div class="card">
+<h3>⚖️ Fazla çalışma</h3>
+
+<div class="answer">
+
+Sorunuz fazla çalışma ile ilgili görünüyor.
+
+📚 Öncelikle 4857 sayılı İş Kanunu'nun
+<strong>41. maddesi</strong> incelenmelidir.
+
+Çalışma süresi bakımından ayrıca
+<strong>63. madde</strong> önemlidir.
+
+🏛️ Aynı konuda uygun Yargıtay kararları
+bulunuyorsa Yargıtay sekmesinden
+aranabilir.
+
+</div>
+</div>`;
+
+}
+
+else if(
+q.includes("yıllık") ||
+q.includes("izin")
+){
+
+cevap=`
+<div class="card">
+<h3>📚 Yıllık izin</h3>
+
+<div class="answer">
+
+Sorunuz yıllık izin ile ilgili görünüyor.
+
+<strong>53, 54, 55, 56 ve 57. maddeler</strong>
+ilgili temel düzenlemelerdir.
+
+🏛️ Yargıtay sekmesinden
+“yıllık izin” araması yaparak ilgili
+kararları da kontrol edebilirsiniz.
+
+</div>
+</div>`;
+
+}
+
+else if(
+q.includes("pazar") ||
+q.includes("hafta tatili")
+){
+
+cevap=`
+<div class="card">
+<h3>📅 Hafta tatili</h3>
+
+<div class="answer">
+
+Sorunuz hafta tatili ile ilgili görünüyor.
+
+4857 sayılı İş Kanunu'nun
+<strong>46. maddesi</strong> temel
+düzenlemelerden biridir.
+
+Ayrıca Yargıtay sekmesinde
+“hafta tatili” veya “pazar çalışması”
+arama yapabilirsiniz.
+
+</div>
+</div>`;
+
+}
+
+else if(
+q.includes("vardiya") ||
+q.includes("gece")
+){
+
+cevap=`
+<div class="card">
+<h3>🌙 Vardiya / gece çalışması</h3>
+
+<div class="answer">
+
+Sorunuz vardiya veya gece çalışması
+ile ilgili görünüyor.
+
+<strong>63. ve 69. maddeler</strong>
+özellikle incelenmelidir.
+
+🏛️ Yargıtay sekmesinde “vardiya”
+arama yaparak kararları kontrol edebilirsiniz.
+
+</div>
+</div>`;
+
+}
+
+else{
+
+cevap=`
+<div class="card">
+
+<h3>🔎 Konuyu birlikte bulalım</h3>
+
+<div class="answer">
+
+Sorunuz için doğrudan eşleşen konu
+bulamadım.
+
+📚 İşçi Kanunu sekmesinde anahtar
+kelimelerle arama yapabilirsiniz.
+
+🏛️ Yargıtay sekmesinde de aynı konuyu
+arayabilirsiniz.
+
+</div>
+
+</div>`;
+
+}
+
+alan.innerHTML=cevap;
+
+}
+
+
+/* BAŞLAT */
+
+kararYukle();
+
+</script>
+
+</body>
+  </html>

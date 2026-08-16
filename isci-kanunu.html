@@ -1,0 +1,362 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>İşçi Kanunu</title>
+
+<style>
+
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    background: #f4f6f8;
+    color: #111827;
+}
+
+header {
+    background: #111827;
+    color: white;
+    padding: 24px 15px;
+    text-align: center;
+}
+
+header h1 {
+    margin: 0;
+}
+
+header p {
+    color: #cbd5e1;
+}
+
+.container {
+    max-width: 900px;
+    margin: auto;
+    padding: 18px;
+}
+
+.card {
+    background: white;
+    padding: 18px;
+    border-radius: 16px;
+    margin-bottom: 15px;
+    box-shadow: 0 4px 15px rgba(0,0,0,.06);
+}
+
+.madde {
+    border-left: 5px solid #111827;
+    padding: 15px;
+    margin-top: 12px;
+    background: #f8fafc;
+    border-radius: 8px;
+}
+
+.madde h3 {
+    margin-top: 0;
+}
+
+button {
+    width: 100%;
+    padding: 14px;
+    border: 0;
+    border-radius: 10px;
+    background: #111827;
+    color: white;
+    font-size: 15px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+input {
+    width: 100%;
+    padding: 14px;
+    border: 1px solid #d1d5db;
+    border-radius: 10px;
+    font-size: 16px;
+}
+
+</style>
+</head>
+
+<body>
+
+<header>
+
+<h1>📚 İşçi Kanunu</h1>
+
+<p>
+4857 Sayılı İş Kanunu
+</p>
+
+</header>
+
+
+<div class="container">
+
+
+<div class="card">
+
+<h2>🔎 Madde ara</h2>
+
+<input
+id="arama"
+placeholder="Örneğin: fazla mesai, yıllık izin, hafta tatili..."
+>
+
+<br><br>
+
+<button onclick="ara()">
+Ara
+</button>
+
+</div>
+
+
+<div class="card">
+
+<h2>📖 İlgili Maddeler</h2>
+
+<div id="sonuclar">
+
+<p>
+Aramak istediğiniz konuyu yazın.
+</p>
+
+</div>
+
+</div>
+
+
+</div>
+
+
+<script>
+
+const maddeler = [
+
+{
+madde:"32",
+baslik:"Ücret ve ücretin ödenmesi",
+konular:[
+"ücret",
+"maaş",
+"ödeme",
+"maaş ödemesi"
+],
+aciklama:
+"İşçinin ücretinin ödenmesine ilişkin temel düzenlemeleri içerir."
+},
+
+{
+madde:"41",
+baslik:"Fazla çalışma",
+konular:[
+"fazla mesai",
+"fazla çalışma",
+"mesai",
+"fazla çalışması"
+],
+aciklama:
+"Fazla çalışma ve fazla çalışma ücretine ilişkin temel düzenlemedir."
+},
+
+{
+madde:"46",
+baslik:"Hafta tatili",
+konular:[
+"hafta tatili",
+"pazar",
+"haftalık izin",
+"hafta tatili ücreti"
+],
+aciklama:
+"İşçinin hafta tatili hakkına ilişkin düzenlemedir."
+},
+
+{
+madde:"47",
+baslik:"Ulusal bayram ve genel tatil",
+konular:[
+"resmi tatil",
+"bayram",
+"genel tatil",
+"ubgt"
+],
+aciklama:
+"Ulusal bayram ve genel tatil günlerinde çalışma ve ücretlendirmeye ilişkin düzenlemedir."
+},
+
+{
+madde:"53",
+baslik:"Yıllık ücretli izin",
+konular:[
+"yıllık izin",
+"senelik izin",
+"izin hakkı",
+"yıllık izin süresi"
+],
+aciklama:
+"Yıllık ücretli izin hakkına ilişkin temel düzenlemedir."
+},
+
+{
+madde:"57",
+baslik:"Yıllık izin ücretinin ödenmesi",
+konular:[
+"izin ücreti",
+"izin parası",
+"yıllık izin ücreti"
+],
+aciklama:
+"Yıllık izin döneminde ücretin ödenmesine ilişkin düzenlemedir."
+},
+
+{
+madde:"63",
+baslik:"Çalışma süresi",
+konular:[
+"çalışma süresi",
+"45 saat",
+"haftalık çalışma",
+"çalışma saati"
+],
+aciklama:
+"Çalışma sürelerine ilişkin temel düzenlemedir."
+},
+
+{
+madde:"68",
+baslik:"Ara dinlenmesi",
+konular:[
+"mola",
+"ara dinlenmesi",
+"dinlenme",
+"çay molası"
+],
+aciklama:
+"Çalışma sırasında verilmesi gereken ara dinlenmelerini düzenler."
+},
+
+{
+madde:"69",
+baslik:"Gece çalışması",
+konular:[
+"gece vardiyası",
+"gece çalışması",
+"gece",
+"vardiya"
+],
+aciklama:
+"Gece dönemi ve gece çalışmalarına ilişkin düzenlemeleri içerir."
+}
+
+];
+
+
+function normal(metin){
+
+return metin
+.toLocaleLowerCase("tr-TR")
+.replace(/ı/g,"i")
+.replace(/ğ/g,"g")
+.replace(/ü/g,"u")
+.replace(/ş/g,"s")
+.replace(/ö/g,"o")
+.replace(/ç/g,"c");
+
+}
+
+
+function ara(){
+
+const arama =
+normal(
+document.getElementById("arama").value
+);
+
+if(!arama){
+
+alert("Lütfen arama konusu yazın.");
+
+return;
+
+}
+
+const kelimeler =
+arama.split(/\s+/);
+
+const bulunan =
+maddeler.filter(madde => {
+
+const metin =
+normal(
+madde.baslik +
+" " +
+madde.konular.join(" ")
+);
+
+return kelimeler.some(
+kelime =>
+kelime.length > 2 &&
+metin.includes(kelime)
+);
+
+});
+
+
+const sonuc =
+document.getElementById("sonuclar");
+
+
+if(bulunan.length === 0){
+
+sonuc.innerHTML = `
+<p>
+🔍 Bu konu için doğrudan eşleşen madde bulunamadı.
+</p>
+`;
+
+return;
+
+}
+
+
+sonuc.innerHTML = "";
+
+
+bulunan.forEach(madde => {
+
+sonuc.innerHTML += `
+
+<div class="madde">
+
+<h3>
+4857 Sayılı İş Kanunu
+Madde ${madde.madde}
+</h3>
+
+<strong>
+${madde.baslik}
+</strong>
+
+<br><br>
+
+${madde.aciklama}
+
+</div>
+
+`;
+
+});
+
+}
+
+</script>
+
+</body>
+  </html>

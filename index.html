@@ -10,97 +10,93 @@
 *{box-sizing:border-box}
 body{
 margin:0;
-font-family:Arial,Helvetica,sans-serif;
-background:#f4f5f7;
+font-family:Arial,sans-serif;
+background:#f3f4f6;
 color:#17202a
 }
 header{
-background:linear-gradient(135deg,#b5121b,#7d0c14);
-color:white;
+background:linear-gradient(135deg,#b5121b,#7b0b12);
+color:#fff;
 text-align:center;
-padding:24px 14px 28px
+padding:22px 12px 26px
 }
 .flag{
-width:120px;
-height:80px;
+width:115px;
+height:77px;
 margin:auto;
-border:4px solid white;
+border:3px solid #fff;
 border-radius:12px;
 overflow:hidden;
-box-shadow:0 5px 20px #0006
+box-shadow:0 5px 18px #0005
 }
 .flag svg{width:100%;height:100%}
-header h1{
-margin:15px 0 5px;
-font-size:26px
-}
-header p{
-margin:0;
-opacity:.9;
-font-size:14px
-}
+header h1{margin:13px 0 5px;font-size:25px}
+header p{margin:0;font-size:14px;opacity:.9}
+
 nav{
 position:sticky;
 top:0;
-z-index:50;
+z-index:20;
 display:flex;
-background:white;
-box-shadow:0 2px 12px #0002
+background:#fff;
+box-shadow:0 2px 10px #0002
 }
 nav button{
 flex:1;
 border:0;
-background:white;
-padding:15px 4px;
+padding:14px 3px;
+background:#fff;
 font-weight:bold;
 cursor:pointer
 }
 nav button.active{
 background:#111827;
-color:white
+color:#fff
 }
+
 main{
 max-width:1000px;
 margin:auto;
-padding:16px
+padding:14px
 }
 .panel{display:none}
 .panel.active{display:block}
+
 .card,.result{
-background:white;
-border-radius:16px;
-padding:18px;
-margin-bottom:15px;
-box-shadow:0 3px 15px #0000000d
+background:#fff;
+border-radius:15px;
+padding:17px;
+margin-bottom:14px;
+box-shadow:0 3px 14px #0000000d
 }
-input,textarea,select{
+
+input,textarea{
 width:100%;
-padding:14px;
-margin:6px 0;
+padding:13px;
 border:1px solid #cbd5e1;
 border-radius:10px;
 font-size:16px;
-background:white
+margin:5px 0
 }
 textarea{
 min-height:120px;
 resize:vertical
 }
+
 .btn{
-display:block;
 width:100%;
-border:0;
-border-radius:10px;
 padding:13px;
 margin-top:8px;
+border:0;
+border-radius:10px;
 background:#111827;
-color:white;
+color:#fff;
 font-weight:bold;
-font-size:15px;
 cursor:pointer
 }
-.btn.red{background:#b5121b}
-.btn.green{background:#166534}
+.red{background:#b5121b}
+.green{background:#166534}
+
 .badge{
 display:inline-block;
 padding:5px 9px;
@@ -109,69 +105,65 @@ border-radius:8px;
 font-size:12px;
 font-weight:bold
 }
+
 .article{
 display:none;
-margin-top:14px;
-padding:17px;
+margin-top:12px;
+padding:16px;
 background:#f8fafc;
-border-radius:12px;
-line-height:1.8;
+border-radius:11px;
+line-height:1.75;
 white-space:pre-line
 }
 .article.open{display:block}
+
 .answer{
-padding:16px;
 background:#f8fafc;
-border-radius:12px;
-line-height:1.75
+padding:15px;
+border-radius:11px;
+line-height:1.7
 }
+
 .warning{
-padding:13px;
-margin-top:13px;
+margin-top:12px;
+padding:12px;
 background:#fff7ed;
 border-left:4px solid #f97316;
-border-radius:8px;
+border-radius:7px;
 font-size:13px;
 line-height:1.6
 }
+
 .small{
 font-size:12px;
 color:#64748b;
 line-height:1.6
 }
+
 .link{
 display:block;
-text-align:center;
 padding:13px;
 margin-top:10px;
 border-radius:10px;
 background:#111827;
-color:white;
+color:#fff;
+text-align:center;
 text-decoration:none;
 font-weight:bold
 }
+
 .empty{
-background:white;
+background:#fff;
 border-radius:14px;
-padding:25px;
+padding:24px;
 text-align:center
 }
-.loading{
-padding:20px;
-text-align:center;
-font-weight:bold
-}
+
 footer{
-padding:30px;
 text-align:center;
+padding:30px;
 font-size:12px;
 color:#64748b
-}
-@media(max-width:600px){
-header h1{font-size:22px}
-.flag{width:105px;height:70px}
-main{padding:10px}
-.card,.result{padding:14px}
 }
 </style>
 </head>
@@ -181,12 +173,11 @@ main{padding:10px}
 <header>
 
 <div class="flag">
-<svg viewBox="0 0 300 200" xmlns="http://www.w3.org/2000/svg">
+<svg viewBox="0 0 300 200">
 <rect width="300" height="200" fill="#e30a17"/>
-<circle cx="120" cy="100" r="62" fill="white"/>
+<circle cx="120" cy="100" r="62" fill="#fff"/>
 <circle cx="145" cy="100" r="50" fill="#e30a17"/>
-<polygon points="220,100 170,115 199,78 199,122 170,85"
-fill="white"/>
+<polygon points="220,100 170,115 199,78 199,122 170,85" fill="#fff"/>
 </svg>
 </div>
 
@@ -196,16 +187,12 @@ fill="white"/>
 </header>
 
 <nav>
-<button class="active" onclick="showTab('soru',this)">💬 Soru-Cevap</button>
-<button onclick="showTab('kanun',this)">📚 Kanun</button>
-<button onclick="showTab('yargitay',this)">🏛️ Yargıtay</button>
+<button class="active" onclick="tab('soru',this)">💬 Soru-Cevap</button>
+<button onclick="tab('kanun',this)">📚 Kanun</button>
+<button onclick="tab('yargitay',this)">🏛️ Yargıtay</button>
 </nav>
 
 <main>
-
-<!-- ==================================================
-SORU CEVAP
-================================================== -->
 
 <section id="soru" class="panel active">
 
@@ -213,24 +200,17 @@ SORU CEVAP
 
 <h2>💬 İşçi Hakları Asistanı</h2>
 
-<textarea
-id="question"
-placeholder="Örneğin: Pazar günü çalışıyorum, hafta tatili ücretim ödenir mi?"></textarea>
+<textarea id="question"
+placeholder="Sorunuzu yazın. Örn: Pazar günü çalışıyorum, hafta tatili ücretim ödenir mi?"></textarea>
 
-<button class="btn red" onclick="answerQuestion()">
-Soruyu Cevapla
-</button>
+<button class="btn red" onclick="answer()">Soruyu Cevapla</button>
 
 </div>
 
-<div id="answer"></div>
+<div id="answerBox"></div>
 
 </section>
 
-
-<!-- ==================================================
-KANUN
-================================================== -->
 
 <section id="kanun" class="panel">
 
@@ -238,60 +218,42 @@ KANUN
 
 <h2>📚 4857 Sayılı İş Kanunu</h2>
 
-<input
-id="lawSearch"
+<input id="lawSearch"
 oninput="searchLaw()"
 placeholder="Madde numarası veya konu yazın...">
 
 <p class="small">
-Madde numarası veya konu yazabilirsiniz.
-Örnek: <b>63</b>, fazla mesai, pazar,
-yıllık izin, gece, ücret, fesih, mola
+Örneğin: <b>41</b>, fazla mesai, pazar,
+yıllık izin, gece, ücret, fesih
 </p>
 
-<div style="display:grid;grid-template-columns:1fr 1fr;gap:8px">
+<button class="btn" onclick="allLaws()">📖 Tüm Maddeleri Göster</button>
 
-<button class="btn" onclick="showAllLaws()">
-📖 Tüm Maddeler
-</button>
-
-<button class="btn green" onclick="openOfficialLaw()">
-🏛️ Güncel ÇSGB Metni
-</button>
+<a class="link"
+target="_blank"
+href="https://www.csgb.gov.tr/cgm/mevzuat/">
+🏛️ ÇSGB Güncel Mevzuat
+</a>
 
 </div>
 
-</div>
-
-<div id="lawResults"></div>
+<div id="lawBox"></div>
 
 </section>
 
-
-<!-- ==================================================
-YARGITAY
-================================================== -->
 
 <section id="yargitay" class="panel">
 
 <div class="card">
 
-<h2>🏛️ Yargıtay Emsal Kararları</h2>
+<h2>🏛️ Yargıtay Karar Arama</h2>
 
-<p class="small">
-Konuyu yazın. Ardından resmi Yargıtay karar
-arama sisteminde aynı konuyu doğrudan arayabilirsiniz.
-</p>
+<input id="caseSearch"
+placeholder="Örn: fazla çalışma hafta tatili">
 
-<input
-id="caseSearch"
-placeholder="Örn: fazla çalışma hafta tatili yıllık izin">
+<button class="btn red" onclick="caseSearch()">🔎 Yargıtay'da Ara</button>
 
-<button class="btn red" onclick="searchYargitay()">
-🔎 Yargıtay'da Ara
-</button>
-
-<div id="caseResults"></div>
+<div id="caseBox"></div>
 
 </div>
 
@@ -307,26 +269,11 @@ Genel hukuki bilgilendirme amaçlıdır.
 
 <script>
 
-/* ==================================================
-GENEL
-================================================== */
+/* ===============================
+TAB
+================================ */
 
-function normalize(text){
-
-return String(text||"")
-.toLocaleLowerCase("tr-TR")
-.replace(/ı/g,"i")
-.replace(/ğ/g,"g")
-.replace(/ü/g,"u")
-.replace(/ş/g,"s")
-.replace(/ö/g,"o")
-.replace(/ç/g,"c")
-.replace(/\s+/g," ")
-.trim();
-
-}
-
-function showTab(id,button){
+function tab(id,btn){
 
 document.querySelectorAll(".panel")
 .forEach(x=>x.classList.remove("active"));
@@ -337,57 +284,52 @@ document.getElementById(id)
 document.querySelectorAll("nav button")
 .forEach(x=>x.classList.remove("active"));
 
-button.classList.add("active");
-
+btn.classList.add("active");
 }
 
 
-/* ==================================================
-4857 MADDE İNDEKSİ
-==================================================
+/* ===============================
+KANUN MADDELERİ
+================================ */
 
-Numaralandırma özellikle eksiksiz tutuluyor.
-Bazı eski/mülga maddeler de ayrıca belirtiliyor.
-================================================== */
-
-const articleTitles = {
+const titles={
 
 1:"Amaç ve kapsam",
 2:"Tanımlar",
 3:"İşyerini bildirme",
 4:"İstisnalar",
 5:"Eşit davranma ilkesi",
-6:"İşyerinin veya bir bölümünün devri",
+6:"İşyerinin devri",
 7:"Geçici iş ilişkisi",
-8:"Tanım ve şekil",
-9:"Türü ve çalışma biçimlerini belirleme serbestisi",
-10:"Sürekli ve süreksiz işlerdeki iş sözleşmeleri",
-11:"Belirli ve belirsiz süreli iş sözleşmesi",
-12:"Belirli ve belirsiz süreli iş sözleşmesi ayırımının sınırları",
-13:"Kısmî süreli ve tam süreli iş sözleşmesi",
-14:"Çağrı üzerine çalışma ve uzaktan çalışma",
-15:"Deneme süreli iş sözleşmesi",
-16:"Takım sözleşmesi ile oluşturulan iş sözleşmeleri",
+8:"İş sözleşmesi",
+9:"Sözleşme türleri",
+10:"Sürekli ve süreksiz işler",
+11:"Belirli ve belirsiz süreli sözleşme",
+12:"Belirli-belirsiz süre ayrımı",
+13:"Kısmi ve tam süreli çalışma",
+14:"Çağrı üzerine ve uzaktan çalışma",
+15:"Deneme süresi",
+16:"Takım sözleşmesi",
 17:"Süreli fesih",
-18:"Feshin geçerli sebebe dayandırılması",
-19:"Sözleşmenin feshinde usul",
-20:"Fesih bildirimine itiraz ve usulü",
-21:"Geçersiz sebeple yapılan feshin sonuçları",
-22:"Çalışma koşullarında değişiklik ve iş sözleşmesinin feshi",
+18:"Geçerli fesih sebebi",
+19:"Fesih usulü",
+20:"Feshe itiraz",
+21:"Geçersiz feshin sonuçları",
+22:"Çalışma koşullarında değişiklik",
 23:"Yeni işverenin sorumluluğu",
-24:"İşçinin haklı nedenle derhal fesih hakkı",
-25:"İşverenin haklı nedenle derhal fesih hakkı",
+24:"İşçinin haklı nedenle feshi",
+25:"İşverenin haklı nedenle feshi",
 26:"Derhal fesih hakkını kullanma süresi",
 27:"Yeni iş arama izni",
 28:"Çalışma belgesi",
 29:"Toplu işçi çıkarma",
-30:"Engelli ve eski hükümlü çalıştırma zorunluluğu",
+30:"Engelli ve eski hükümlü çalıştırma",
 31:"Askerlik ve kanundan doğan çalışma",
-32:"Ücret ve ücretin ödenmesi",
-33:"İşverenin ödeme aczine düşmesi",
+32:"Ücret",
+33:"İşverenin ödeme aczi",
 34:"Ücretin gününde ödenmemesi",
 35:"Ücretin saklı kısmı",
-36:"Kamu makamlarının ve asıl işverenlerin hakedişlerinden ücreti kesme yükümlülüğü",
+36:"Hakedişlerden ücret kesme",
 37:"Ücret hesap pusulası",
 38:"Ücret kesme cezası",
 39:"Asgari ücret",
@@ -395,212 +337,554 @@ const articleTitles = {
 41:"Fazla çalışma ücreti",
 42:"Zorunlu nedenlerle fazla çalışma",
 43:"Olağanüstü hallerde fazla çalışma",
-44:"Ulusal bayram ve genel tatil günlerinde çalışma",
+44:"Ulusal bayram ve genel tatil",
 45:"Saklı haklar",
-46:"Hafta tatili ücreti",
+46:"Hafta tatili",
 47:"Genel tatil ücreti",
 48:"Geçici iş göremezlik",
-49:"Ücret şekillerine göre tatil ücreti",
-50:"Tatil ücretine girmeyen kısımlar",
+49:"Ücret şekillerine göre tatil",
+50:"Tatil ücretine girmeyenler",
 51:"Yüzdelerin ödenmesi",
 52:"Yüzdelerin belgelenmesi",
-53:"Yıllık ücretli izin hakkı ve izin süreleri",
-54:"Yıllık ücretli izne hak kazanma ve izni kullanma dönemi",
-55:"Yıllık izin bakımından çalışılmış gibi sayılan haller",
-56:"Yıllık ücretli iznin uygulanması",
+53:"Yıllık izin hakkı",
+54:"Yıllık izne hak kazanma",
+55:"Çalışılmış sayılan haller",
+56:"Yıllık iznin uygulanması",
 57:"Yıllık izin ücreti",
 58:"İzinde çalışma yasağı",
-59:"Sözleşmenin sona ermesinde izin ücreti",
+59:"İzin ücretinin ödenmesi",
 60:"İzinlere ilişkin düzenlemeler",
 61:"Sigorta primleri",
-62:"Ücretten indirim yapılamayacak haller",
+62:"Ücretten indirim yasağı",
 63:"Çalışma süresi",
 64:"Telafi çalışması",
-65:"Kısa çalışma ve kısa çalışma ödeneği",
+65:"Kısa çalışma",
 66:"Çalışma süresinden sayılan haller",
-67:"Günlük çalışmanın başlama ve bitiş saatleri",
+67:"Çalışmanın başlama ve bitiş saatleri",
 68:"Ara dinlenmesi",
-69:"Gece süresi ve gece çalışmaları",
-70:"Hazırlama, tamamlama ve temizleme işleri",
-71:"Çalıştırma yaşı ve çocukları çalıştırma yasağı",
-72:"Yer ve su altında çalıştırma yasağı",
+69:"Gece çalışması",
+70:"Hazırlama, tamamlama ve temizleme",
+71:"Çalıştırma yaşı",
+72:"Yer ve su altında çalışma",
 73:"Gece çalıştırma yasağı",
-74:"Analık halinde çalışma ve süt izni",
+74:"Analık ve süt izni",
 75:"İşçi özlük dosyası",
 76:"Yönetmelikler",
-77:"İşverenlerin ve işçilerin yükümlülükleri",
-78:"İş sağlığı ve güvenliği yönetmelikleri",
-79:"İşin durdurulması veya işyerinin kapatılması",
-80:"İş sağlığı ve güvenliği kurulu",
-81:"İş sağlığı ve güvenliği hizmetleri",
-82:"İş güvenliği ile görevli mühendis veya teknik elemanlar",
-83:"İşçilerin hakları",
-84:"İçki veya uyuşturucu madde kullanma yasağı",
+77:"İşveren ve işçi yükümlülükleri",
+78:"İş sağlığı ve güvenliği",
+79:"İşin durdurulması",
+80:"İSG kurulu",
+81:"İSG hizmetleri",
+82:"İş güvenliği görevlileri",
+83:"İşçinin çalışmaktan kaçınma hakkı",
+84:"İçki ve uyuşturucu yasağı",
 85:"Ağır ve tehlikeli işler",
 86:"Ağır ve tehlikeli işlerde rapor",
-87:"On sekiz yaşından küçük işçiler için rapor",
-88:"Gebe veya çocuk emziren kadınlar için yönetmelik",
+87:"18 yaşından küçük işçiler",
+88:"Gebe ve çocuk emziren kadınlar",
 89:"Çeşitli yönetmelikler",
 90:"İş ve işçi bulmaya aracılık",
 91:"Devletin yetkisi",
-92:"Yetkili makam ve memurlar",
-93:"Yetkili memurların ödevi",
+92:"Yetkili makam",
+93:"Yetkili memurların görevi",
 94:"Muafiyet",
-95:"Diğer merciler tarafından yapılan teftişler",
-96:"İşçi ve işverenin sorumluluğu",
+95:"Diğer mercilerce yapılan teftiş",
+96:"İşçi ve işveren sorumluluğu",
 97:"Zabıtanın yardımı",
-98:"İşyerini bildirme yükümlülüğüne aykırılık",
+98:"Bildirme yükümlülüğüne aykırılık",
 99:"Genel hükümlere aykırılık",
-100:"Toplu işçi çıkarma ile ilgili hükümlere aykırılık",
-101:"Engelli ve eski hükümlü çalıştırma zorunluluğuna aykırılık",
-102:"Ücret ile ilgili hükümlere aykırılık",
-103:"Yıllık ücretli izin hükümlerine aykırılık",
-104:"İşin düzenlenmesine ilişkin hükümlere aykırılık",
-105:"İş sağlığı ve güvenliği ile ilgili hükümlere aykırılık",
-106:"İş ve işçi bulma hükümlerine aykırılık",
-107:"İş hayatının denetim ve teftişi ile ilgili hükümlere aykırılık",
-108:"İdari para cezalarının uygulanmasına ilişkin hususlar",
-109:"Yazılı veya elektronik bildirim",
-110:"Konut kapıcılarının özel çalışma koşulları",
-111:"Sanayi, ticaret, tarım ve orman işleri",
-112:"Bazı kamu kurum ve kuruluşlarında çalışanların kıdem tazminatı",
-113:"Bazı işlerde çalışanların ücretlerinin güvencesi",
+100:"Toplu işçi çıkarma cezası",
+101:"Engelli çalıştırma cezası",
+102:"Ücret hükümlerine aykırılık",
+103:"Yıllık izin hükümlerine aykırılık",
+104:"Çalışma düzenine aykırılık",
+105:"İSG hükümlerine aykırılık",
+106:"İş ve işçi bulma hükümleri",
+107:"Denetim ve teftiş hükümleri",
+108:"İdari para cezaları",
+109:"Bildirim",
+110:"Konut kapıcıları",
+111:"Sanayi ve ticaret işleri",
+112:"Kıdem tazminatı",
+113:"Ücret güvencesi",
 114:"Üçlü Danışma Kurulu",
-115:"Kantin açılması",
+115:"Kantin",
 116:"Kaldırılan hükümler",
 117:"Kaldırılan hükümler",
-118:"Sendikalarla ilgili değişiklikler",
+118:"Sendikalar",
 119:"Yönetmelikler",
 120:"Yürürlükten kaldırılan hükümler",
 121:"Yürürlük",
 122:"Yürütme"
+
 };
 
 
-/* ==================================================
-SIK KULLANILAN TAM MADDE METİNLERİ
-==================================================
+/* ===============================
+ÖNEMLİ MADDELERİN METİNLERİ
+================================ */
 
-Kullanıcı özellikle tıklayınca metni görmek istediği
-için önemli maddeler doğrudan uygulama içinde bulunur.
-Diğer maddeler resmi güncel metne yönlendirilir.
-================================================== */
+const texts={
 
-const fullArticles = {
+5:`İş ilişkisinde dil, ırk, renk, cinsiyet, engellilik, siyasal düşünce, felsefî inanç, din ve mezhep ve benzeri sebeplere dayalı ayrım yapılamaz.`,
 
-1:`Bu Kanunun amacı işverenler ile bir iş sözleşmesine dayanarak çalıştırılan işçilerin çalışma şartları ve çalışma ortamına ilişkin hak ve sorumluluklarını düzenlemektir.
-
-Bu Kanun, 4 üncü maddedeki istisnalar dışında kalan bütün işyerlerine, bu işyerlerinin işverenleri ile işveren vekillerine ve işçilerine faaliyet konularına bakılmaksızın uygulanır.`,
-
-5:`İş ilişkisinde dil, ırk, renk, cinsiyet, engellilik, siyasal düşünce, felsefî inanç, din ve mezhep ve benzeri sebeplere dayalı ayrım yapılamaz.
-
-İşveren, esaslı sebepler olmadıkça tam süreli çalışan işçi karşısında kısmî süreli çalışan işçiye, belirsiz süreli çalışan işçi karşısında belirli süreli çalışan işçiye farklı işlem yapamaz.`,
-
-18:`Otuz veya daha fazla işçi çalıştıran işyerlerinde en az altı aylık kıdemi olan işçinin belirsiz süreli iş sözleşmesini fesheden işveren, işçinin yeterliliğinden veya davranışlarından ya da işletmenin, işyerinin veya işin gereklerinden kaynaklanan geçerli bir sebebe dayanmak zorundadır.`,
+18:`Otuz veya daha fazla işçi çalıştırılan işyerlerinde en az altı aylık kıdemi bulunan işçinin belirsiz süreli iş sözleşmesini fesheden işveren, işçinin yeterliliğinden veya davranışlarından ya da işletmenin, işyerinin veya işin gereklerinden kaynaklanan geçerli bir sebebe dayanmak zorundadır.`,
 
 19:`İşveren fesih bildirimini yazılı olarak yapmak ve fesih sebebini açık ve kesin bir şekilde belirtmek zorundadır.`,
 
-20:`İş sözleşmesi feshedilen işçi, fesih bildiriminde sebep gösterilmediği veya gösterilen sebebin geçerli bir sebep olmadığı iddiası ile fesih bildiriminin tebliği tarihinden itibaren bir ay içinde işe iade talebiyle, İş Mahkemeleri Kanunu hükümleri uyarınca arabulucuya başvurmak zorundadır.`,
+20:`İş sözleşmesi feshedilen işçi, fesih bildiriminde sebep gösterilmediği veya gösterilen sebebin geçerli olmadığı iddiası ile fesih bildiriminin tebliği tarihinden itibaren bir ay içinde işe iade talebiyle arabulucuya başvurmak zorundadır.`,
 
-21:`İşverence geçerli sebep gösterilmediği veya gösterilen sebebin geçerli olmadığı mahkemece veya özel hakem tarafından tespit edilerek feshin geçersizliğine karar verildiğinde, işveren işçiyi bir ay içinde işe başlatmak zorundadır.
+21:`Feshin geçersiz olduğuna karar verilmesi halinde işveren işçiyi bir ay içinde işe başlatmak zorundadır. İşçiyi başvurusu üzerine işe başlatmazsa işçiye en az dört, en çok sekiz aylık ücreti tutarında tazminat ödemekle yükümlü olur.`,
 
-İşçiyi başvurusu üzerine işveren bir ay içinde işe başlatmaz ise, işçiye en az dört aylık ve en çok sekiz aylık ücreti tutarında tazminat ödemekle yükümlü olur.`,
+24:`İşçi, Kanunda belirtilen haklı nedenlerin bulunması halinde iş sözleşmesini sürenin bitiminden önce veya bildirim süresini beklemeksizin feshedebilir.`,
 
-22:`İşveren, iş sözleşmesiyle veya iş sözleşmesinin eki niteliğindeki personel yönetmeliği ve benzeri kaynaklar ya da işyeri uygulamasıyla oluşan çalışma koşullarında esaslı bir değişikliği ancak durumu işçiye yazılı olarak bildirmek suretiyle yapabilir. Bu şekle uygun olarak yapılmayan ve işçi tarafından altı işgünü içinde yazılı olarak kabul edilmeyen değişiklikler işçiyi bağlamaz.`,
+25:`İşveren, Kanunda belirtilen haklı nedenlerin bulunması halinde iş sözleşmesini sürenin bitiminden önce veya bildirim süresini beklemeksizin feshedebilir.`,
 
-24:`Süresi belirli olsun veya olmasın işçi, bu maddede belirtilen hallerde iş sözleşmesini sürenin bitiminden önce veya bildirim süresini beklemeksizin feshedebilir.`,
+27:`Bildirim süreleri içinde işveren, işçiye yeni iş bulması için gerekli iş arama iznini iş saatleri içinde ve ücret kesintisi yapmadan vermek zorundadır. İş arama izni günde iki saatten az olamaz.`,
 
-25:`Süresi belirli olsun veya olmasın işveren, bu maddede belirtilen hallerde iş sözleşmesini sürenin bitiminden önce veya bildirim süresini beklemeksizin feshedebilir.`,
-
-27:`Bildirim süreleri içinde işveren, işçiye yeni bir iş bulması için gerekli olan iş arama iznini iş saatleri içinde ve ücret kesintisi yapmadan vermeye mecburdur. İş arama izninin süresi günde iki saatten az olamaz.`,
-
-32:`Genel anlamda ücret bir kimseye bir iş karşılığında işveren veya üçüncü kişiler tarafından sağlanan ve para ile ödenen tutardır.
-
-Ücret, prim, ikramiye ve bu nitelikteki her çeşit istihkak, kural olarak, Türk parası ile işyerinde veya özel olarak açılan banka hesabına ödenir.`,
+32:`Genel anlamda ücret, bir kimseye bir iş karşılığında işveren veya üçüncü kişiler tarafından sağlanan ve para ile ödenen tutardır.`,
 
 34:`Ücreti ödeme gününden itibaren yirmi gün içinde mücbir bir neden dışında ödenmeyen işçi, iş görme borcunu yerine getirmekten kaçınabilir.`,
 
-37:`İşveren işyerinde veya bankaya yaptığı ödemelerde işçiye ücret hesabını gösterir imzalı veya işyerinin özel işaretini taşıyan bir pusula vermek zorundadır.`,
+37:`İşveren, işçiye ücret hesabını gösterir imzalı veya işyerinin özel işaretini taşıyan bir ücret hesap pusulası vermek zorundadır.`,
 
-41:`Ülkenin genel yararları yahut işin niteliği veya üretimin artırılması gibi nedenlerle fazla çalışma yapılabilir.
+41:`Genel bakımdan haftalık kırkbeş saati aşan çalışmalar fazla çalışma sayılır. Her bir saat fazla çalışma için verilecek ücret, normal çalışma ücretinin saat başına düşen miktarının yüzde elli yükseltilmesi suretiyle ödenir.`,
 
-Fazla çalışma, Kanunda yazılı koşullar çerçevesinde, haftalık kırkbeş saati aşan çalışmalardır.
+44:`Ulusal bayram ve genel tatil günlerinde çalışılıp çalışılmayacağı toplu iş sözleşmesi veya iş sözleşmesi ile kararlaştırılır. Sözleşmede hüküm bulunmaması halinde çalışılması için işçinin onayı gerekir.`,
 
-Her bir saat fazla çalışma için verilecek ücret normal çalışma ücretinin saat başına düşen miktarının yüzde elli yükseltilmesi suretiyle ödenir.`,
+46:`İşçilere, yedi günlük zaman dilimi içinde kesintisiz en az yirmidört saat hafta tatili verilmelidir. Çalışılmayan hafta tatili günü için bir iş karşılığı olmaksızın o günün ücreti tam olarak ödenir.`,
 
-44:`Ulusal bayram ve genel tatil günlerinde işyerinde çalışılıp çalışılmayacağı toplu iş sözleşmesi veya iş sözleşmeleri ile kararlaştırılır. Sözleşmelerde hüküm bulunmaması halinde söz konusu günlerde çalışılması için işçinin onayı gereklidir.`,
+47:`Ulusal bayram ve genel tatil günlerinde çalışmayan işçiye o günün ücreti tam olarak ödenir. Çalışırsa ayrıca çalışılan her gün için bir günlük ücret ödenir.`,
 
-46:`Bu Kanun kapsamına giren işyerlerinde, işçilere tatil gününden önce belirlenen iş günlerinde çalışmış olmaları koşuluyla, yedi günlük bir zaman dilimi içinde kesintisiz en az yirmidört saat dinlenme, hafta tatili verilir.
+53:`İşyerinde işe başladığı günden itibaren en az bir yıl çalışmış olan işçilere yıllık ücretli izin verilir. Yıllık izin hakkından vazgeçilemez. Hizmet süresi bir yıldan beş yıla kadar olanlara ondört gün, beş yıldan fazla onbeş yıldan az olanlara yirmi gün, onbeş yıl ve daha fazla olanlara yirmialtı günden az izin verilemez.`,
 
-Çalışılmayan hafta tatili günü için işveren tarafından bir iş karşılığı olmaksızın o günün ücreti tam olarak ödenir.`,
+57:`İşveren, yıllık ücretli iznini kullanan işçiye yıllık izin dönemine ilişkin ücreti izin dönemine başlamadan önce peşin olarak veya avans şeklinde ödemek zorundadır.`,
 
-47:`Bu Kanun kapsamına giren işyerlerinde çalışan işçilere, kanunlarda ulusal bayram ve genel tatil günü olarak kabul edilen günlerde çalışmazlarsa, bir iş karşılığı olmaksızın o günün ücretleri tam olarak, tatil yapmayarak çalışırlarsa ayrıca çalışılan her gün için bir günlük ücreti ödenir.`,
+59:`İş sözleşmesinin sona ermesi halinde işçinin hak kazanıp kullanmadığı yıllık izin sürelerine ait ücret, sözleşmenin sona erdiği tarihteki ücreti üzerinden ödenir.`,
 
-53:`İşyerinde işe başladığı günden itibaren, deneme süresi de içinde olmak üzere, en az bir yıl çalışmış olan işçilere yıllık ücretli izin verilir.
+62:`Her türlü işte uygulanmakta olan ücret sisteminin kanuna aykırı olarak değiştirilmesi suretiyle işçinin ücretinden indirim yapılamaz.`,
 
-Yıllık ücretli izin hakkından vazgeçilemez.
+63:`Genel bakımdan çalışma süresi haftada en çok kırkbeş saattir. Tarafların anlaşması ile haftalık normal çalışma süresi, haftanın çalışılan günlerine günde onbir saati aşmamak koşuluyla farklı şekilde dağıtılabilir.`,
 
-İşçilerin yıllık ücretli izin süresi, hizmet süresi bir yıldan beş yıla kadar olanlara ondört günden, beş yıldan fazla onbeş yıldan az olanlara yirmi günden, onbeş yıl ve daha fazla olanlara yirmialtı günden az olamaz.`,
+64:`Zorunlu nedenler veya kanunda belirtilen diğer haller nedeniyle çalışılmayan süreler için işveren, iki ay içinde telafi çalışması yaptırabilir.`,
 
-54:`Yıllık ücretli izne hak kazanmak için gerekli sürenin hesabında işçilerin, aynı işverenin bir veya çeşitli işyerlerinde çalıştıkları süreler birleştirilerek göz önüne alınır.`,
+68:`Günlük çalışma süresinin ortalama bir zamanında işçilere ara dinlenmesi verilir. Dört saat veya daha kısa süreli işlerde onbeş dakika, dört saatten fazla ve yedibuçuk saate kadar işlerde yarım saat, yedibuçuk saatten fazla işlerde bir saat ara dinlenmesi verilir.`,
 
-56:`Yıllık ücretli izin işveren tarafından bölünemez.
+69:`Gece en geç saat 20.00'de başlayarak en erken saat 06.00'ya kadar geçen ve her halde en fazla onbir saat süren dönemdir. İşçilerin gece çalışmaları yedibuçuk saati geçemez.`,
 
-Ancak, izin süreleri, tarafların anlaşması ile bir bölümü on günden aşağı olmamak üzere bölümler halinde kullanılabilir.`,
+74:`Kadın işçilerin doğumdan önce sekiz ve doğumdan sonra sekiz hafta olmak üzere toplam onaltı haftalık süre için çalıştırılmamaları esastır. Kadın işçilere bir yaşından küçük çocuklarını emzirmeleri için günde toplam birbuçuk saat süt izni verilir.`,
 
-57:`İşveren, yıllık ücretli iznini kullanan her işçiye, yıllık izin dönemine ilişkin ücretini ilgili döneme ait ücret ödemesinden önce peşin olarak veya avans şeklinde ödemek zorundadır.`,
+75:`İşveren çalıştırdığı her işçi için bir özlük dosyası düzenlemek ve gerekli belge ve kayıtları saklamak zorundadır.`,
 
-59:`İş sözleşmesinin, herhangi bir nedenle sona ermesi halinde işçinin hak kazanıp da kullanmadığı yıllık izin sürelerine ait ücreti, sözleşmenin sona erdiği tarihteki ücreti üzerinden kendisine veya hak sahiplerine ödenir.`,
+83:`İşyerinde işçinin sağlığını bozacak veya vücut bütünlüğünü tehlikeye sokacak yakın, acil ve hayati bir tehlike bulunan hallerde, gerekli tedbirler alınıncaya kadar işçi çalışmaktan kaçınabilir.`
 
-62:`Her türlü işte uygulanmakta olan ücret sisteminin, kanun hükümlerine aykırı olarak değiştirilmesi suretiyle işçinin ücretinden indirim yapılamaz.`,
-
-63:`Genel bakımdan çalışma süresi haftada en çok kırkbeş saattir.
-
-Aksi kararlaştırılmamışsa bu süre, işyerlerinde haftanın çalışılan günlerine eşit ölçüde bölünerek uygulanır.
-
-Tarafların anlaşması ile haftalık normal çalışma süresi, işyerlerinde haftanın çalışılan günlerine, günde onbir saati aşmamak koşulu ile farklı şekilde dağıtılabilir.`,
-
-64:`Zorunlu nedenlerle işin durması, ulusal bayram ve genel tatillerden önce veya sonra işyerinin tatil edilmesi veya benzer nedenlerle işyerinde normal çalışma sürelerinin önemli ölçüde altında çalışılması veya tamamen tatil edilmesi ya da işçinin talebi ile kendisine izin verilmesi hallerinde işveren iki ay içinde çalışılmayan süreler için telafi çalışması yaptırabilir.`,
-
-68:`Günlük çalışma süresinin ortalama bir zamanında o yerin gelenekleri ve işin gereğine göre ayarlanmak suretiyle işçilere ara dinlenmesi verilir.
-
-Dört saat veya daha kısa süreli işlerde onbeş dakika, dört saatten fazla ve yedibuçuk saate kadar süreli işlerde yarım saat, yedibuçuk saatten fazla süreli işlerde bir saat ara dinlenmesi verilir.`,
-
-69:`Çalışma hayatında gece en geç saat 20.00'de başlayarak en erken saat 06.00'ya kadar geçen ve her halde en fazla onbir saat süren dönemdir.
-
-İşçilerin gece çalışmaları yedibuçuk saati geçemez.`,
-
-74:`Kadın işçilerin doğumdan önce sekiz ve doğumdan sonra sekiz hafta olmak üzere toplam onaltı haftalık süre için çalıştırılmamaları esastır.
-
-Kadın işçilere bir yaşından küçük çocuklarını emzirmeleri için günde toplam birbuçuk saat süt izni verilir.`,
-
-75:`İşveren çalıştırdığı her işçi için bir özlük dosyası düzenler. İşveren bu dosyada, kanun ve diğer kanunlar uyarınca düzenlemek zorunda olduğu her türlü belge ve kayıtları saklamak ve bunları istendiği zaman yetkili memur ve mercilere göstermek zorundadır.`,
-
-83:`İşyerinde iş sağlığı ve güvenliği açısından işçinin sağlığını bozacak veya vücut bütünlüğünü tehlikeye sokacak yakın, acil ve hayati bir tehlike ile karşı karşıya kalan işçi, gerekli iş sağlığı ve güvenliği tedbiri alınıncaya kadar çalışmaktan kaçınabilir.`,
-
-109:`Bu Kanunda öngörülen bildirimler işverenlerce ilgiliye yazılı olarak ve imza karşılığında yapılır. Bildirim yapılan kişi bunu imzalamazsa durum o yerde tutanakla tespit edilir.`,
-
-120:`25.8.1971 tarihli ve 1475 sayılı İş Kanununun 14 üncü maddesi hariç diğer maddeleri yürürlükten kaldırılmıştır.`,
-
-121:`Bu Kanun yayımı tarihinde yürürlüğe girer.`,
-
-122:`Bu Kanun hükümlerini Bakanlar Kurulu yürütür.`
 };
 
 
-/* ==================================================
-KONU ANAHTARLARI
-================================================== */
+/* ===============================
+KONU -> MADDE
+================================ */
 
-const keywords={
+const topics={
 
 "fazla mesai":[41,63,64],
 "fazla çalışma":[41,63,64],
-"mesai":[41,63,64],
+"mesai":[41,63],
 "pazar":[46,47],
 "hafta tatili":[46],
-"tatil":[46,47],
-"yıllık izin":[53,54,55,56,57,58,59,60],
-"izin":[53,54,55,56,57,58,59,60],
+"yıllık izin":[53,54,55,56,57,58,59],
+"yillik izin":[53,54,55,56,57,58,59],
+"izin":[53,54,55,56,57,58,59],
 "maaş":[32,34,37],
-"ücret":[32,34
+"maas":[32,34,37],
+"ücret":[32,34,37,62],
+"ucret":[32,34,37,62],
+"fesih":[18,19,20,21,22,24,25],
+"işten çıkar":[18,19,20,21],
+"isten cikar":[18,19,20,21],
+"işe iade":[18,19,20,21],
+"vardiya":[63,68,69],
+"gece":[69],
+"gece vardiyası":[69],
+"mola":[68],
+"ara dinlenmesi":[68],
+"telafi":[64],
+"bayram":[44,47],
+"resmi tatil":[44,47],
+"doğum":[74],
+"gebelik":[74],
+"hamile":[74],
+"süt izni":[74],
+"iş sağlığı":[77,78,79,80,81,83],
+"iş güvenliği":[77,78,79,80,81,83],
+"özlük":[75],
+"iş arama":[27],
+"ayrımcılık":[5],
+"eşitlik":[5]
+
+};
+
+
+/* ===============================
+KANUN OLUŞTUR
+================================ */
+
+const laws=[];
+
+for(let i=1;i<=122;i++){
+
+if(titles[i]){
+
+laws.push({
+n:i,
+title:titles[i],
+text:texts[i]||""
+});
+
+}
+
+}
+
+
+/* ===============================
+ARAMA
+================================ */
+
+function norm(s){
+
+return String(s||"")
+.toLocaleLowerCase("tr-TR")
+.replace(/ı/g,"i")
+.replace(/ğ/g,"g")
+.replace(/ü/g,"u")
+.replace(/ş/g,"s")
+.replace(/ö/g,"o")
+.replace(/ç/g,"c");
+
+}
+
+
+function searchLaw(){
+
+let q=norm(
+document.getElementById("lawSearch").value
+);
+
+if(!q){
+
+document.getElementById("lawBox").innerHTML="";
+return;
+
+}
+
+let ids=[];
+
+if(/^\d+$/.test(q)){
+
+let n=Number(q);
+
+if(titles[n])ids.push(n);
+
+}else{
+
+Object.keys(topics).forEach(k=>{
+
+if(norm(k).includes(q)||q.includes(norm(k))){
+
+ids.push(...topics[k]);
+
+}
+
+});
+
+laws.forEach(x=>{
+
+if(
+norm(x.title).includes(q) ||
+norm(x.title).split(" ").some(w=>w.startsWith(q))
+){
+
+ids.push(x.n);
+
+}
+
+});
+
+}
+
+ids=[...new Set(ids)].sort((a,b)=>a-b);
+
+render(ids);
+
+}
+
+
+function render(ids){
+
+let box=document.getElementById("lawBox");
+
+if(!ids.length){
+
+box.innerHTML=`
+<div class="empty">
+❌ İlgili madde bulunamadı.
+<br><br>
+<a class="link"
+target="_blank"
+href="https://www.csgb.gov.tr/cgm/mevzuat/">
+ÇSGB Güncel Mevzuat
+</a>
+</div>`;
+return;
+
+}
+
+box.innerHTML=ids.map(n=>{
+
+let t=titles[n];
+let text=texts[n];
+
+return `
+
+<div class="result">
+
+<span class="badge">4857 • MADDE ${n}</span>
+
+<h3>Madde ${n} - ${t}</h3>
+
+<button class="btn"
+onclick="openArticle(${n})">
+📖 Maddeyi Oku
+</button>
+
+<div id="a${n}" class="article">
+
+<strong>MADDE ${n}</strong>
+
+<p>${text||"Bu madde için güncel tam metni resmi ÇSGB mevzuat kaynağından kontrol edebilirsiniz."}</p>
+
+${!text?`
+
+<a class="link"
+target="_blank"
+href="https://www.csgb.gov.tr/cgm/mevzuat/">
+🏛️ ÇSGB Güncel Metin
+</a>`:""}
+
+</div>
+
+</div>
+
+`;
+
+}).join("");
+
+}
+
+
+function openArticle(n){
+
+let el=document.getElementById("a"+n);
+
+if(el)el.classList.toggle("open");
+
+}
+
+
+function allLaws(){
+
+render(laws.map(x=>x.n));
+
+}
+
+
+/* ===============================
+SORU CEVAP
+================================ */
+
+function answer(){
+
+let q=norm(
+document.getElementById("question").value
+);
+
+let box=document.getElementById("answerBox");
+
+if(!q){
+
+box.innerHTML=
+`<div class="card">⚠️ Sorunuzu yazın.</div>`;
+
+return;
+
+}
+
+let ids=[];
+
+Object.keys(topics).forEach(k=>{
+
+if(q.includes(norm(k))){
+
+ids.push(...topics[k]);
+
+}
+
+});
+
+ids=[...new Set(ids)];
+
+if(!ids.length){
+
+box.innerHTML=`
+
+<div class="card">
+
+<h3>⚖️ Genel değerlendirme</h3>
+
+<div class="answer">
+Sorunuz için doğrudan tek bir madde belirlemek
+mümkün değil. Çalışma şekli, iş sözleşmesi,
+toplu iş sözleşmesi ve fiili çalışma koşulları
+birlikte değerlendirilmelidir.
+</div>
+
+</div>`;
+
+return;
+
+}
+
+
+/* KISA VE FARKLI CEVAPLAR */
+
+const replies=[
+
+"Bu konuda çalışma süreniz ve işyerindeki uygulama birlikte değerlendirilmelidir.",
+
+"Bu durumda ilgili kanun maddesinin yanında vardiya ve ücret kayıtları da önemlidir.",
+
+"Somut olayın ayrıntıları sonucu değiştirebilir. Aşağıdaki maddeler doğrudan ilgili düzenlemelerdir.",
+
+"Bu konuda işverenin uygulaması ile sözleşme hükümlerinin birlikte incelenmesi gerekir."
+
+];
+
+let reply=
+replies[Math.floor(Math.random()*replies.length)];
+
+box.innerHTML=`
+
+<div class="card">
+
+<h3>⚖️ Kısa cevap</h3>
+
+<div class="answer">
+${reply}
+</div>
+
+<h3>📚 İlgili maddeler</h3>
+
+${ids.map(n=>`
+
+<button class="btn"
+onclick="goLaw(${n})">
+📖 Madde ${n} - ${titles[n]}
+</button>
+
+`).join("")}
+
+<div class="warning">
+Aşağıdaki maddeye dokunarak ilgili metni
+doğrudan uygulama içinde okuyabilirsiniz.
+</div>
+
+</div>
+
+`;
+
+}
+
+
+function goLaw(n){
+
+document.querySelectorAll(".panel")
+.forEach(x=>x.classList.remove("active"));
+
+document.getElementById("kanun")
+.classList.add("active");
+
+document.querySelectorAll("nav button")
+.forEach(x=>x.classList.remove("active"));
+
+document.querySelectorAll("nav button")[1]
+.classList.add("active");
+
+document.getElementById("lawSearch").value=n;
+
+searchLaw();
+
+setTimeout(()=>{
+openArticle(n);
+},100);
+
+}
+
+
+/* ===============================
+YARGITAY
+================================ */
+
+function caseSearch(){
+
+let q=document
+.getElementById("caseSearch")
+.value
+.trim();
+
+let box=document.getElementById("caseBox");
+
+if(!q){
+
+box.innerHTML=
+`<div class="empty">🔎 Aranacak konuyu yazın.</div>`;
+
+return;
+
+}
+
+let url=
+"https://karararama.yargitay.gov.tr/?aranan="
++
+encodeURIComponent(q);
+
+box.innerHTML=`
+
+<div class="result">
+
+<span class="badge">
+🏛️ YARGITAY
+</span>
+
+<h3>${q}</h3>
+
+<p>
+Bu arama doğrudan Yargıtay'ın resmi karar
+arama sistemine yönlendirilir.
+</p>
+
+<a class="link"
+target="_blank"
+href="${url}">
+🏛️ Yargıtay Kararında Ara
+</a>
+
+</div>
+
+`;
+
+}
+
+</script>
+
+</body>
+</html>

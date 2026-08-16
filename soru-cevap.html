@@ -1,0 +1,431 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+
+<title>İşçi Hakları Soru Cevap</title>
+
+<style>
+
+*{
+box-sizing:border-box;
+}
+
+body{
+margin:0;
+font-family:Arial,sans-serif;
+background:#f3f4f6;
+color:#111827;
+}
+
+header{
+background:#111827;
+color:white;
+padding:25px 15px;
+text-align:center;
+}
+
+header h1{
+margin:0;
+font-size:25px;
+}
+
+.container{
+max-width:800px;
+margin:auto;
+padding:18px;
+}
+
+.card{
+background:white;
+padding:18px;
+border-radius:15px;
+margin-bottom:15px;
+box-shadow:0 3px 12px rgba(0,0,0,.07);
+}
+
+textarea{
+width:100%;
+min-height:130px;
+padding:15px;
+border:1px solid #d1d5db;
+border-radius:10px;
+font-size:16px;
+resize:vertical;
+}
+
+button{
+width:100%;
+padding:15px;
+margin-top:10px;
+border:0;
+border-radius:10px;
+background:#111827;
+color:white;
+font-size:16px;
+font-weight:bold;
+cursor:pointer;
+}
+
+.answer{
+margin-top:15px;
+padding:16px;
+background:#f8fafc;
+border-radius:10px;
+line-height:1.7;
+}
+
+.badge{
+display:inline-block;
+background:#eef2ff;
+padding:6px 9px;
+border-radius:7px;
+font-size:12px;
+margin-bottom:10px;
+}
+
+.warning{
+font-size:12px;
+color:#64748b;
+line-height:1.5;
+}
+
+</style>
+</head>
+
+<body>
+
+<header>
+
+<h1>⚖️ İşçi Hakları Asistanı</h1>
+
+<p>Kısa ve konuya uygun cevaplar</p>
+
+</header>
+
+<div class="container">
+
+<div class="card">
+
+<h2>💬 Sorunu Yaz</h2>
+
+<textarea
+id="soru"
+placeholder="Örneğin: Fazla mesai ücretim ödenmedi..."
+></textarea>
+
+<button onclick="cevapla()">
+Cevabı Göster
+</button>
+
+</div>
+
+<div id="sonuc"></div>
+
+</div>
+
+<script>
+
+function normal(metin){
+
+return metin
+.toLocaleLowerCase("tr-TR")
+.replace(/ı/g,"i")
+.replace(/ğ/g,"g")
+.replace(/ü/g,"u")
+.replace(/ş/g,"s")
+.replace(/ö/g,"o")
+.replace(/ç/g,"c");
+
+}
+
+
+const cevaplar={
+
+fazlaMesai:[
+
+"Fazla mesai konusunda 4857 sayılı İş Kanunu'nun 41. maddesi temel düzenlemelerden biridir. Çalışma saatlerinizi ve bordrolarınızı kontrol edin.",
+
+"Fazla çalışma yaptıysanız öncelikle haftalık çalışma sürenizi ve bu çalışmaların ücret bordrosuna yansıyıp yansımadığını kontrol edin.",
+
+"Fazla mesai ücretiniz ödenmiyorsa vardiya çizelgesi, puantaj, bordro ve çalışma kayıtlarını saklamanız önemli olabilir."
+
+],
+
+izin:[
+
+"Yıllık ücretli izin hakkının temel düzenlemesi 4857 sayılı Kanun'un 53. maddesidir. Çalışma süreniz izin hakkınızın belirlenmesinde önemlidir.",
+
+"Yıllık izin konusunda kullandığınız izinleri ve işyerindeki izin kayıtlarını kontrol edin. İş sözleşmesinin sona ermesi halinde 59. madde de önemlidir.",
+
+"İzin hakkınızın ne kadar olduğunu belirlemek için öncelikle aynı işverene bağlı çalışma sürenize bakmak gerekir."
+
+],
+
+pazar:[
+
+"Pazar günü çalışmanızın değerlendirilmesi için o günün sizin hafta tatiliniz olup olmadığına bakılmalıdır. 46. madde önemlidir.",
+
+"Hafta tatilinde çalışıyorsanız haftalık çalışma düzeniniz ve size verilen dinlenme günü önem taşır.",
+
+"Pazar çalışması konusunda vardiya sisteminiz de önemlidir. Çalışma çizelgenizi ve hafta tatili günlerinizi kontrol edin."
+
+],
+
+ucret:[
+
+"Ücretiniz geç veya eksik ödeniyorsa bordrolarınızı banka ödemeleriyle karşılaştırın. 4857 sayılı Kanun'un 32 ve 34. maddeleri önemlidir.",
+
+"Maaşınızın eksik ödendiğini düşünüyorsanız bordro, banka dekontu ve fiili çalışma sürenizi birlikte kontrol edin.",
+
+"Ücret konusunda ödeme tarihlerini ve eksik yatırılan miktarları belgelemek ileride önemli olabilir."
+
+],
+
+vardiya:[
+
+"Vardiyalı çalışmada haftalık çalışma süresi, günlük çalışma süresi ve dinlenme süreleri birlikte değerlendirilir. 63. madde önemlidir.",
+
+"Gece vardiyasında çalışıyorsanız 69. madde ayrıca önem taşır. Vardiya başlangıç ve bitiş saatlerinizi kaydedin.",
+
+"Vardiya düzeninin değerlendirilmesinde sadece toplam saat değil, gece çalışması ve dinlenme süreleri de önemlidir."
+
+],
+
+mola:[
+
+"Ara dinlenmesi konusunda 4857 sayılı Kanun'un 68. maddesi temel düzenlemedir. Günlük çalışma süreniz önemlidir.",
+
+"Mola verilmiyorsa fiilen kaç saat çalıştığınızı ve vardiya saatlerinizi kayıt altına almak yararlı olabilir.",
+
+"Ara dinlenmesi süresi çalışma sürenize göre değişir. Günlük çalışma sürenizi bilmeden kesin süre söylemek doğru olmaz."
+
+],
+
+istenCikarma:[
+
+"İşten çıkarılmanızın hukuka uygun olup olmadığı fesih nedenine ve size bildirilen gerekçeye bağlıdır. Fesih belgenizi saklayın.",
+
+"İşveren sizi işten çıkardıysa fesih bildirimi, bordrolar ve çalışma kayıtları önemlidir. İşe iade bakımından 18-21. maddeler önem taşır.",
+
+"İşten çıkarılma konusunda fesih şekli belirleyicidir. Haklı neden, geçerli neden ve diğer fesih türleri birbirinden farklıdır."
+
+],
+
+istifa:[
+
+"İstifa etmeden önce kıdem, ihbar ve kullanılmamış izin haklarınızı kontrol etmek önemlidir.",
+
+"İşçinin kendi isteğiyle ayrılması ile haklı nedenle fesih aynı değildir. Ayrılma nedeniniz haklarınızı etkileyebilir.",
+
+"İşten ayrılmayı düşünüyorsanız özellikle haklı fesih iddianız varsa belgeleri incelemeden işlem yapmayın."
+
+],
+
+tazminat:[
+
+"Kıdem tazminatında çalışma süresi kadar iş sözleşmesinin hangi nedenle sona erdiği de önemlidir.",
+
+"Tazminat hesabında çalışma süresi, ücret ve işten ayrılma şekli birlikte değerlendirilir.",
+
+"Kıdem tazminatı konusunda net hesap için işe giriş tarihi, çıkış tarihi ve son ücret gibi bilgiler gerekir."
+
+],
+
+genel:[
+
+"Bu konu olayın ayrıntılarına göre değişebilir. Çalışma süreniz, sözleşmeniz ve işverenin yaptığı işlem önemlidir.",
+
+"Bu soruya kesin cevap verebilmek için olayın nasıl gerçekleştiği önemli. Özellikle tarihleri ve işverenin yaptığı işlemi belirtin.",
+
+"İş hukukunda aynı olay farklı şartlarda farklı sonuç doğurabilir. Çalışma düzeniniz ve belgeleriniz birlikte değerlendirilmelidir.",
+
+"Bu konuda ilgili kanun maddesi olayın ayrıntılarına göre değişebilir. Sorunuzu biraz daha ayrıntılı yazabilirsiniz."
+
+]
+
+};
+
+
+function sec(liste){
+
+return liste[
+Math.floor(Math.random()*liste.length)
+];
+
+}
+
+
+function cevapla(){
+
+const soru=document.getElementById("soru").value.trim();
+
+const q=normal(soru);
+
+const sonuc=document.getElementById("sonuc");
+
+if(!q){
+
+sonuc.innerHTML=`
+
+<div class="card">
+
+⚠️ Lütfen sorunuzu yazın.
+
+</div>
+
+`;
+
+return;
+
+}
+
+let cevap;
+
+let konu="İşçi hakkı";
+
+
+if(q.includes("fazla") || q.includes("mesai")){
+
+cevap=sec(cevaplar.fazlaMesai);
+
+konu="Fazla çalışma";
+
+}
+
+else if(
+q.includes("yillik") ||
+q.includes("izin")
+){
+
+cevap=sec(cevaplar.izin);
+
+konu="Yıllık izin";
+
+}
+
+else if(
+q.includes("pazar") ||
+q.includes("hafta tatili")
+){
+
+cevap=sec(cevaplar.pazar);
+
+konu="Hafta tatili";
+
+}
+
+else if(
+q.includes("maas") ||
+q.includes("ücret") ||
+q.includes("ucret") ||
+q.includes("para")
+){
+
+cevap=sec(cevaplar.ucret);
+
+konu="Ücret";
+
+}
+
+else if(
+q.includes("vardiya") ||
+q.includes("gece")
+){
+
+cevap=sec(cevaplar.vardiya);
+
+konu="Vardiya / gece çalışması";
+
+}
+
+else if(
+q.includes("mola") ||
+q.includes("dinlen")
+){
+
+cevap=sec(cevaplar.mola);
+
+konu="Ara dinlenmesi";
+
+}
+
+else if(
+q.includes("kovul") ||
+q.includes("işten çıkar") ||
+q.includes("isten cikar") ||
+q.includes("fesih")
+){
+
+cevap=sec(cevaplar.istenCikarma);
+
+konu="İşten çıkarma";
+
+}
+
+else if(
+q.includes("istifa") ||
+q.includes("ayril") ||
+q.includes("ayrıl")
+){
+
+cevap=sec(cevaplar.istifa);
+
+konu="İşten ayrılma";
+
+}
+
+else if(
+q.includes("tazminat") ||
+q.includes("kidem") ||
+q.includes("kıdem")
+){
+
+cevap=sec(cevaplar.tazminat);
+
+konu="Tazminat";
+
+}
+
+else{
+
+cevap=sec(cevaplar.genel);
+
+}
+
+
+sonuc.innerHTML=`
+
+<div class="card">
+
+<span class="badge">
+📌 ${konu}
+</span>
+
+<h3>⚖️ İşçi Hakları Asistanı</h3>
+
+<div class="answer">
+
+${cevap}
+
+</div>
+
+<p class="warning">
+
+Bu cevap genel bilgilendirme amaçlıdır.
+Somut olayın belgeleri ve güncel mevzuat
+ayrıca değerlendirilmelidir.
+
+</p>
+
+</div>
+
+`;
+
+}
+
+</script>
+
+</body>
+  </html>

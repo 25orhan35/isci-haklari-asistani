@@ -1,0 +1,950 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>İşçi Hakları Asistanı</title>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
+
+<style>
+*{box-sizing:border-box}
+
+body{
+margin:0;
+font-family:Arial,sans-serif;
+background:#f3f4f6;
+color:#111827
+}
+
+header{
+background:#111827;
+color:#fff;
+padding:25px 15px;
+text-align:center
+}
+
+header h1{
+margin:0;
+font-size:25px
+}
+
+header p{
+margin:8px 0 0;
+color:#cbd5e1
+}
+
+nav{
+display:flex;
+position:sticky;
+top:0;
+z-index:10;
+background:#fff;
+box-shadow:0 2px 10px #ddd
+}
+
+nav button{
+flex:1;
+padding:15px 5px;
+border:0;
+background:#fff;
+font-weight:bold;
+font-size:14px
+}
+
+nav button.active{
+background:#111827;
+color:#fff
+}
+
+.container{
+max-width:900px;
+margin:auto;
+padding:18px
+}
+
+.panel{display:none}
+.panel.active{display:block}
+
+.card{
+background:#fff;
+padding:18px;
+border-radius:15px;
+margin-bottom:15px;
+box-shadow:0 3px 12px rgba(0,0,0,.07)
+}
+
+textarea,input{
+width:100%;
+padding:14px;
+border:1px solid #d1d5db;
+border-radius:10px;
+font-size:16px;
+margin-bottom:10px
+}
+
+textarea{
+min-height:120px;
+resize:vertical
+}
+
+.btn{
+width:100%;
+padding:14px;
+border:0;
+border-radius:10px;
+background:#111827;
+color:#fff;
+font-size:16px;
+font-weight:bold;
+cursor:pointer
+}
+
+.result{
+background:#fff;
+padding:17px;
+border-radius:14px;
+margin-bottom:12px;
+box-shadow:0 3px 12px rgba(0,0,0,.06)
+}
+
+.result h3{
+margin:0 0 10px
+}
+
+.badge{
+display:inline-block;
+padding:5px 8px;
+background:#eef2ff;
+border-radius:7px;
+font-size:12px;
+margin-bottom:8px
+}
+
+.detail{
+display:none;
+margin-top:15px;
+padding:18px;
+background:#f8fafc;
+border-radius:10px;
+line-height:1.8;
+white-space:pre-line
+}
+
+.detail.open{
+display:block
+}
+
+.answer{
+padding:16px;
+background:#f8fafc;
+border-radius:10px;
+line-height:1.7
+}
+
+.small{
+font-size:12px;
+color:#64748b;
+line-height:1.5
+}
+
+.loading{
+text-align:center;
+padding:20px;
+color:#64748b
+}
+
+.articleText{
+font-size:16px;
+line-height:1.9;
+white-space:pre-line
+}
+
+.back{
+margin-top:12px;
+background:#e5e7eb;
+color:#111827
+}
+</style>
+</head>
+
+<body>
+
+<header>
+<h1>⚖️ İşçi Hakları Asistanı</h1>
+<p>Kanun • Soru-Cevap • Yargıtay</p>
+</header>
+
+<nav>
+<button class="active" onclick="sekme('soru',this)">
+💬 Soru-Cevap
+</button>
+
+<button onclick="sekme('kanun',this)">
+📚 İşçi Kanunu
+</button>
+
+<button onclick="sekme('yargitay',this)">
+🏛️ Yargıtay
+</button>
+</nav>
+
+<div class="container">
+
+<section id="soru" class="panel active">
+
+<div class="card">
+
+<h2>💬 İşçinin Sorusu</h2>
+
+<textarea id="soruInput"
+placeholder="Örneğin: 12 saat vardiya çalışıyorum, bu yasal mı?"></textarea>
+
+<button class="btn" onclick="soruSor()">
+Soruyu Cevapla
+</button>
+
+</div>
+
+<div id="cevap"></div>
+
+</section>
+
+
+<section id="kanun" class="panel">
+
+<div class="card">
+
+<h2>📚 4857 Sayılı İş Kanunu</h2>
+
+<input
+id="kanunInput"
+placeholder="Madde veya konu ara: 63, fazla mesai, yıllık izin, pazar, vardiya..."
+oninput="kanunAra()">
+
+<div id="durum" class="small">
+Kanun metni hazırlanıyor...
+</div>
+
+</div>
+
+<div id="kanunSonuc"></div>
+
+</section>
+
+
+<section id="yargitay" class="panel">
+
+<div class="card">
+
+<h2>🏛️ Yargıtay Kararları</h2>
+
+<input
+id="yargitayInput"
+placeholder="Fazla mesai, hafta tatili, yıllık izin..."
+oninput="yargitayAra()">
+
+</div>
+
+<div id="yargitaySonuc"></div>
+
+</section>
+
+</div>
+
+
+<script>
+
+pdfjsLib.GlobalWorkerOptions.workerSrc=
+"https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js";
+
+
+/*
+==================================================
+GÜNCEL ÇSGB 4857 İŞ KANUNU
+PDF KULLANICIYA GÖSTERİLMEZ.
+UYGULAMA METNİ ARKA PLANDA ÇIKARIR.
+==================================================
+*/
+
+const RESMI_KANUN=
+"https://www.csgb.gov.tr/Media/crldhi51/4857-say%C4%B1l%C4%B1-i%C5%9F-kanunu.pdf";
+
+
+let kanunMetni="";
+let maddeler=[];
+
+
+/* SEKME */
+
+function sekme(id,buton){
+
+document.querySelectorAll(".panel")
+.forEach(x=>x.classList.remove("active"));
+
+document.getElementById(id)
+.classList.add("active");
+
+document.querySelectorAll("nav button")
+.forEach(x=>x.classList.remove("active"));
+
+buton.classList.add("active");
+
+}
+
+
+/* PDF'Yİ ARKA PLANDA OKU */
+
+async function kanunuYukle(){
+
+const durum=document.getElementById("durum");
+
+try{
+
+durum.innerText=
+"📚 Güncel İş Kanunu hazırlanıyor...";
+
+const pdf=await pdfjsLib.getDocument({
+url:RESMI_KANUN
+}).promise;
+
+let sayfalar=[];
+
+for(let i=1;i<=pdf.numPages;i++){
+
+const page=await pdf.getPage(i);
+
+const content=await page.getTextContent();
+
+const text=content.items
+.map(x=>x.str)
+.join(" ");
+
+sayfalar.push(text);
+
+}
+
+kanunMetni=sayfalar.join("\n");
+
+maddeleriAyir();
+
+durum.innerText=
+"✅ Güncel İş Kanunu hazır. Madde veya konu arayabilirsiniz.";
+
+}catch(e){
+
+console.error(e);
+
+durum.innerHTML=
+"⚠️ Kanun metni otomatik alınamadı. İnternet bağlantınızı kontrol edin.";
+
+}
+
+}
+
+
+/* MADDELERİ AYIR */
+
+function maddeleriAyir(){
+
+maddeler=[];
+
+/*
+Madde 1, Madde 2...
+ifadelerini bulur.
+*/
+
+const regex=
+/(?:^|\s)(?:MADDE|Madde)\s+(\d+)\s*[-–.]?\s*/g;
+
+let eslesmeler=[];
+let match;
+
+while((match=regex.exec(kanunMetni))!==null){
+
+eslesmeler.push({
+no:Number(match[1]),
+start:match.index,
+end:regex.lastIndex
+});
+
+}
+
+
+for(let i=0;i<eslesmeler.length;i++){
+
+const mevcut=eslesmeler[i];
+
+const sonraki=
+eslesmeler[i+1];
+
+const bitis=
+sonraki ? sonraki.start : kanunMetni.length;
+
+let metin=
+kanunMetni.substring(
+mevcut.end,
+bitis
+).trim();
+
+if(metin.length<20) continue;
+
+maddeler.push({
+no:mevcut.no,
+metin:metin
+});
+
+}
+
+}
+
+
+/* NORMALLEŞTİR */
+
+function norm(x){
+
+return (x||"")
+.toLocaleLowerCase("tr-TR")
+.replace(/ı/g,"i")
+.replace(/ğ/g,"g")
+.replace(/ü/g,"u")
+.replace(/ş/g,"s")
+.replace(/ö/g,"o")
+.replace(/ç/g,"c");
+
+}
+
+
+/* KANUN ARAMA */
+
+function kanunAra(){
+
+const q=
+norm(document.getElementById("kanunInput").value.trim());
+
+const alan=
+document.getElementById("kanunSonuc");
+
+if(!q){
+
+alan.innerHTML="";
+return;
+}
+
+if(!maddeler.length){
+
+alan.innerHTML=
+`<div class="card loading">
+Kanun metni hazırlanıyor...
+</div>`;
+
+return;
+}
+
+
+let sonuc=[];
+
+
+/*
+Madde numarası aranıyorsa
+doğrudan maddeyi bul.
+*/
+
+if(/^\d+$/.test(q)){
+
+const no=Number(q);
+
+const madde=
+maddeler.find(x=>x.no===no);
+
+if(madde){
+
+sonuc=[{
+...madde,
+puan:100
+}];
+
+}
+
+}else{
+
+const kelimeler=q.split(/\s+/);
+
+sonuc=maddeler.map(m=>{
+
+const metin=norm(m.metin);
+
+let puan=0;
+
+kelimeler.forEach(k=>{
+
+if(metin.includes(k))
+puan++;
+
+});
+
+return {
+...m,
+puan
+};
+
+})
+.filter(x=>x.puan>0)
+.sort((a,b)=>b.puan-a.puan)
+.slice(0,20);
+
+}
+
+
+if(!sonuc.length){
+
+alan.innerHTML=`
+<div class="card">
+🔍 Bu konuda ilgili madde bulunamadı.
+</div>`;
+
+return;
+}
+
+
+alan.innerHTML=sonuc.map((m,i)=>`
+
+<div class="result">
+
+<span class="badge">
+${i===0?"⭐ En alakalı":"📚 İlgili madde"}
+</span>
+
+<h3>
+Madde ${m.no}
+</h3>
+
+<button class="btn"
+onclick="maddeGoster(${m.no})">
+📖 Maddeyi Oku
+</button>
+
+<div
+id="madde-${m.no}"
+class="detail">
+
+<div class="articleText">
+
+<strong>MADDE ${m.no}</strong>
+
+${temizle(m.metin)}
+
+</div>
+
+</div>
+
+</div>
+
+`).join("");
+
+}
+
+
+/* MADDEYİ AÇ */
+
+function maddeGoster(no){
+
+const alan=
+document.getElementById("madde-"+no);
+
+if(!alan)return;
+
+alan.classList.toggle("open");
+
+if(alan.classList.contains("open")){
+
+setTimeout(()=>{
+
+alan.scrollIntoView({
+behavior:"smooth",
+block:"center"
+});
+
+},100);
+
+}
+
+}
+
+
+/* METİN TEMİZLE */
+
+function temizle(text){
+
+return text
+.replace(/\s+/g," ")
+.replace(/\s([,.;:])/g,"$1")
+.replace(/\(\s+/g,"(")
+.replace(/\s+\)/g,")")
+.trim();
+
+}
+
+
+/* SORU CEVAP */
+
+const cevapBankasi={
+
+mesai:[
+"Fazla çalışma konusunda 4857 sayılı Kanun'un 41. maddesi temel hükümdür. Haftalık çalışma süresi için 63. madde de önemlidir.",
+"Fazla mesai yaptıysanız çalışma saatlerinizi, puantajları ve bordroları saklayın. Ödenmeyen çalışmaların belgelenmesi önemlidir.",
+"Fazla çalışma değerlendirilirken haftalık toplam çalışma süresi dikkate alınır."
+],
+
+izin:[
+"Yıllık ücretli izin hakkının temel düzenlemesi 53. maddedir. İşyerindeki çalışma süreniz önemlidir.",
+"Kullanmadığınız yıllık izinleri ve işyeri izin kayıtlarını kontrol edin. Sözleşme sona erdiğinde 59. madde de önemlidir.",
+"Yıllık izin konusunda kıdem süreniz ve kullandığınız izinler birlikte değerlendirilmelidir."
+],
+
+pazar:[
+"Pazar günü çalışmanızın değerlendirilmesi için o günün sizin hafta tatiliniz olup olmadığına bakılmalıdır. 46. madde önemlidir.",
+"Hafta tatilinde çalışıyorsanız haftalık çalışma düzeniniz ve dinlenme gününüz önem taşır.",
+"Pazar çalışması konusunda vardiya çizelgeniz ve hafta tatili gününüz birlikte incelenmelidir."
+],
+
+vardiya:[
+"Vardiyalı çalışmada haftalık çalışma süresi önemlidir. 63. maddeye bakılabilir.",
+"Gece vardiyasında çalışıyorsanız 69. madde ayrıca önem taşır.",
+"Vardiya düzeninde çalışma süresi kadar dinlenme sürelerinin de incelenmesi gerekir."
+],
+
+ucret:[
+"Ücretiniz eksik veya geç ödeniyorsa bordroları banka kayıtlarıyla karşılaştırın. 32 ve 34. maddeler önemlidir.",
+"Maaş ödemelerinde gecikme varsa ödeme tarihlerini ve eksik miktarları belgelemek önemlidir.",
+"Ücret konusunda bordro, banka ödemesi ve fiili çalışma birlikte değerlendirilmelidir."
+],
+
+mola:[
+"Ara dinlenmesi konusunda 68. madde temel düzenlemedir.",
+"Mola verilmiyorsa vardiya başlangıç ve bitiş saatlerinizi kaydetmeniz yararlı olabilir.",
+"Ara dinlenmesinin süresi günlük çalışma sürenize göre belirlenir."
+],
+
+fesih:[
+"İşten çıkarılmanızın hukuka uygunluğu fesih nedenine bağlıdır. Size verilen fesih bildirimini saklayın.",
+"İşten çıkarılmada fesih gerekçesi önemlidir. İşe iade bakımından 18 ila 21. maddeler önem taşır.",
+"Fesih konusunda haklı neden ve geçerli neden ayrımı yapılmalıdır."
+],
+
+kidem:[
+"Kıdem tazminatında çalışma süresi kadar iş sözleşmesinin hangi nedenle sona erdiği de önemlidir.",
+"Kıdem tazminatı için işe giriş, çıkış ve ayrılma şekli birlikte değerlendirilmelidir.",
+"Tazminat hesabında çalışma süresi ve ücret bilgileri önem taşır."
+],
+
+genel:[
+"Bu konu olayın ayrıntılarına göre değişebilir. Çalışma düzeniniz ve işverenin yaptığı işlem önemlidir.",
+"İş hukukunda aynı konu farklı şartlarda farklı sonuç doğurabilir.",
+"Doğru değerlendirme için çalışma saatleri, sözleşme ve işverenin yaptığı işlem birlikte incelenmelidir."
+]
+
+};
+
+
+function rastgele(x){
+
+return x[
+Math.floor(Math.random()*x.length)
+];
+
+}
+
+
+function soruSor(){
+
+const q=
+norm(document.getElementById("soruInput").value.trim());
+
+const alan=
+document.getElementById("cevap");
+
+if(!q){
+
+alan.innerHTML=
+`<div class="card">⚠️ Sorunuzu yazın.</div>`;
+
+return;
+}
+
+let cevap;
+let konu;
+let ilgili=[];
+
+if(q.includes("mesai")||q.includes("fazla")){
+
+cevap=rastgele(cevapBankasi.mesai);
+konu="Fazla çalışma";
+ilgili=[41,63];
+
+}
+
+else if(q.includes("izin")||q.includes("yillik")){
+
+cevap=rastgele(cevapBankasi.izin);
+konu="Yıllık izin";
+ilgili=[53,54,55,56,57,59];
+
+}
+
+else if(q.includes("pazar")||q.includes("hafta tatili")){
+
+cevap=rastgele(cevapBankasi.pazar);
+konu="Hafta tatili";
+ilgili=[46];
+
+}
+
+else if(q.includes("vardiya")||q.includes("gece")){
+
+cevap=rastgele(cevapBankasi.vardiya);
+konu="Vardiya / gece";
+ilgili=[63,69];
+
+}
+
+else if(q.includes("maas")||q.includes("ucret")){
+
+cevap=rastgele(cevapBankasi.ucret);
+konu="Ücret";
+ilgili=[32,34];
+
+}
+
+else if(q.includes("mola")||q.includes("dinlen")){
+
+cevap=rastgele(cevapBankasi.mola);
+konu="Ara dinlenmesi";
+ilgili=[68];
+
+}
+
+else if(
+q.includes("kovul")||
+q.includes("isten cikar")||
+q.includes("fesih")
+){
+
+cevap=rastgele(cevapBankasi.fesih);
+konu="Fesih";
+ilgili=[18,19,20,21,24,25];
+
+}
+
+else if(
+q.includes("kidem")||
+q.includes("tazminat")
+){
+
+cevap=rastgele(cevapBankasi.kidem);
+konu="Kıdem / tazminat";
+ilgili=[];
+
+}
+
+else{
+
+cevap=rastgele(cevapBankasi.genel);
+konu="Genel iş hukuku";
+ilgili=[];
+
+}
+
+
+alan.innerHTML=`
+
+<div class="card">
+
+<span class="badge">
+📌 ${konu}
+</span>
+
+<h3>⚖️ Kısa cevap</h3>
+
+<div class="answer">
+${cevap}
+</div>
+
+${
+ilgili.length
+?
+`
+<p>
+<strong>📚 İlgili maddeler:</strong>
+</p>
+
+${ilgili.map(no=>`
+
+<button
+class="btn"
+style="margin-bottom:8px"
+onclick="kanunSekmesineGit(${no})">
+
+📖 Madde ${no}'yi Oku
+
+</button>
+
+`).join("")}
+
+`
+:""
+}
+
+<p class="small">
+Bu cevap genel bilgilendirme amaçlıdır.
+Somut olayın belgeleri ve güncel mevzuat
+ayrıca değerlendirilmelidir.
+</p>
+
+</div>
+
+`;
+
+}
+
+
+/* SORUDAN MADDEYE GEÇ */
+
+function kanunSekmesineGit(no){
+
+const buton=
+document.querySelectorAll("nav button")[1];
+
+sekme("kanun",buton);
+
+document.getElementById("kanunInput").value=no;
+
+kanunAra();
+
+setTimeout(()=>{
+
+maddeGoster(no);
+
+},500);
+
+}
+
+
+/* YARGITAY */
+
+const yargitay=[
+{
+daire:"22. Hukuk Dairesi",
+esas:"2016/21829",
+karar:"2019/19638",
+konu:"İşçilik alacakları"
+},
+{
+daire:"9. Hukuk Dairesi",
+esas:"2011/6774",
+karar:"2013/13240",
+konu:"İşçilik alacakları"
+},
+{
+daire:"22. Hukuk Dairesi",
+esas:"2017/24115",
+karar:"2019/17734",
+konu:"İşçilik alacakları"
+},
+{
+daire:"9. Hukuk Dairesi",
+esas:"2019/186",
+karar:"2019/1842",
+konu:"İşçilik alacakları"
+}
+];
+
+
+function yargitayAra(){
+
+const q=
+norm(document.getElementById("yargitayInput").value.trim());
+
+const alan=
+document.getElementById("yargitaySonuc");
+
+if(!q){
+
+alan.innerHTML="";
+return;
+}
+
+const sonuc=yargitay.filter(k=>{
+
+const metin=norm(
+k.daire+" "+
+k.esas+" "+
+k.karar+" "+
+k.konu
+);
+
+return q.split(/\s+/)
+.every(x=>metin.includes(x));
+
+});
+
+
+if(!sonuc.length){
+
+alan.innerHTML=`
+
+<div class="card">
+
+🔍 Bu aramada kayıtlı karar bulunamadı.
+
+<p class="small">
+Not: Yargıtay kararlarının tam metni,
+karar numarası doğrulanarak ayrıca
+incelenmelidir.
+</p>
+
+</div>
+
+`;
+
+return;
+}
+
+
+alan.innerHTML=sonuc.map(k=>`
+
+<div class="result">
+
+<span class="badge">
+🏛️ Yargıtay
+</span>
+
+<h3>${k.daire}</h3>
+
+<p>
+<strong>Esas:</strong> ${k.esas}
+</p>
+
+<p>
+<strong>Karar:</strong> ${k.karar}
+</p>
+
+<p>
+<strong>Konu:</strong> ${k.konu}
+</p>
+
+</div>
+
+`).join("");
+
+}
+
+
+/* BAŞLAT */
+
+kanunuYukle();
+
+</script>
+
+</body>
+  </html>
